@@ -4,7 +4,7 @@ A proof-of-concept database that integrates `species taxonomy`, `collection meta
 ## Backend Development Setup
 
 **.env setup**
-1) Create `.envg`
+1) Create `.env`
 2) Update `.env` following format from`.env.example` which is taken from the [Neon Postgres Website](console.neon.tech)
 
 **run backend**
