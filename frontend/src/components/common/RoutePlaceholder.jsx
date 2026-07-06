@@ -1,3 +1,5 @@
+import PageHeader from '@/components/ui/PageHeader'
+
 export default function RoutePlaceholder({ title }) {
-  return <h1>{title}</h1>
+  return <PageHeader title={title} />
 }

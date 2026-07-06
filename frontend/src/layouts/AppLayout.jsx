@@ -1,18 +1,16 @@
 import { Outlet } from 'react-router-dom'
 
-import FooterPlaceholder from '@/components/layout/FooterPlaceholder'
-import NavbarPlaceholder from '@/components/layout/NavbarPlaceholder'
+import Footer from '@/components/layout/Footer'
+import Navbar from '@/components/layout/Navbar'
 
 export default function AppLayout() {
   return (
-    <div className="min-h-screen">
-      <NavbarPlaceholder />
-      <main>
-        <div className="app-container py-6">
-          <Outlet />
-        </div>
+    <div className="flex min-h-screen flex-col bg-[var(--app-bg)] text-[var(--app-text)]">
+      <Navbar />
+      <main className="app-container flex-1 py-6 sm:py-8">
+        <Outlet />
       </main>
-      <FooterPlaceholder />
+      <Footer />
     </div>
   )
 }
