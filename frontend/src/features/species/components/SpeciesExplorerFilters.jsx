@@ -1,31 +1,24 @@
-import { ChevronDown } from 'lucide-react'
-
 import Button from '@/components/ui/Button'
 import Card from '@/components/ui/Card'
 import SearchInput from '@/components/ui/SearchInput'
-import { cn } from '@/utils/cn'
+import SelectWithChevron from '@/components/ui/SelectWithChevron'
 import { speciesFilterOptions } from '@/features/species/data/speciesExplorerData'
 
 function SelectField({ label, options }) {
   return (
     <div className="space-y-2">
       <label className="text-sm font-semibold text-black">{label}</label>
-      <div className="relative">
-        <select
-          defaultValue={options[0]}
-          className={cn(
-            'h-11 w-full appearance-none rounded-2xl border border-[var(--app-border)] bg-white px-4 pr-10 text-sm text-[var(--app-text)] outline-none transition',
-            'focus:border-brand-300 focus:ring-2 focus:ring-brand-100',
-          )}
-        >
+      <SelectWithChevron
+        value={options[0]}
+        onChange={() => {}}
+        selectClassName="pr-12"
+      >
           {options.map((option) => (
             <option key={option} value={option}>
               {option}
             </option>
           ))}
-        </select>
-        <ChevronDown className="pointer-events-none absolute right-4 top-1/2 h-4 w-4 -translate-y-1/2 text-[var(--app-muted)]" />
-      </div>
+      </SelectWithChevron>
     </div>
   )
 }

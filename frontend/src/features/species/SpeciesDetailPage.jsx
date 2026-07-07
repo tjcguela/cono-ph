@@ -1,12 +1,14 @@
 import { useMemo, useState } from 'react'
-import { ArrowUpRight, ChevronDown, Download } from 'lucide-react'
+import { ArrowUpRight, Download } from 'lucide-react'
 import { Link, useParams } from 'react-router-dom'
 
+import Badge from '@/components/ui/Badge'
 import Breadcrumbs from '@/components/ui/Breadcrumbs'
 import Button from '@/components/ui/Button'
 import Card from '@/components/ui/Card'
 import Pagination from '@/components/ui/Pagination'
 import SearchInput from '@/components/ui/SearchInput'
+import SelectWithChevron from '@/components/ui/SelectWithChevron'
 import { cn } from '@/utils/cn'
 
 import { defaultSpeciesDetailId, speciesDetailRecords } from '@/features/species/data/speciesDetailData'
@@ -57,30 +59,6 @@ function StatItem({ value, label }) {
   )
 }
 
-function FilterSelect({ value, onChange, children, className }) {
-  const [isOpen, setIsOpen] = useState(false)
-
-  return (
-    <div className={cn('relative', className)}>
-      <select
-        value={value}
-        onChange={onChange}
-        onFocus={() => setIsOpen(true)}
-        onBlur={() => setIsOpen(false)}
-        className="h-11 w-full min-w-[246px] appearance-none rounded-2xl border border-[var(--app-border)] bg-white px-4 pr-12 text-sm text-[var(--app-text)] outline-none transition focus:border-brand-300 focus:ring-2 focus:ring-brand-100"
-      >
-        {children}
-      </select>
-      <ChevronDown
-        className={cn(
-          'pointer-events-none absolute right-4 top-1/2 h-4 w-4 -translate-y-1/2 text-[var(--app-muted)] transition-transform duration-200',
-          isOpen && 'rotate-180',
-        )}
-      />
-    </div>
-  )
-}
-
 function ConopeptidesTab({ species }) {
   const totalCount = species.statistics[0]?.value ?? species.conopeptides.length
   const [page, setPage] = useState(1)
@@ -101,29 +79,29 @@ function ConopeptidesTab({ species }) {
       <div className="space-y-4">
         <div className="flex flex-col gap-4 xl:flex-row xl:items-end xl:justify-between">
           <div className="flex flex-col gap-4 lg:flex-row lg:flex-wrap lg:items-end xl:flex-1">
-          <SearchInput placeholder="Search by.." className="w-full lg:max-w-[328px]" />
+            <SearchInput placeholder="Search by.." className="w-full lg:max-w-[328px]" />
 
-          <FilterSelect
+            <SelectWithChevron
               value={geneSuperfamily}
               onChange={(event) => setGeneSuperfamily(event.target.value)}
-          >
+            >
               <option>All Superfamilies</option>
               <option>M</option>
               <option>O1</option>
               <option>T</option>
               <option>A</option>
-          </FilterSelect>
+            </SelectWithChevron>
 
-          <FilterSelect
+            <SelectWithChevron
               value={cysteineFramework}
               onChange={(event) => setCysteineFramework(event.target.value)}
-          >
+            >
               <option>All Cysteine Frameworks</option>
               <option>Framework III</option>
               <option>Framework VI/VII</option>
               <option>Framework XII</option>
-          </FilterSelect>
-        </div>
+            </SelectWithChevron>
+          </div>
 
         <div className="inline-flex items-stretch self-start overflow-hidden rounded-2xl border border-[var(--app-border)] bg-white shadow-sm xl:self-auto">
           <button
@@ -186,6 +164,135 @@ function ConopeptidesTab({ species }) {
                   <td className="px-5 py-4 text-[var(--app-text)]">{row.framework}</td>
                   <td className="px-5 py-4 text-[var(--app-text)]">{row.specimenId}</td>
                   <td className="px-5 py-4 text-[var(--app-text)]">{row.publication}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <Pagination page={page} totalPages={4} onPageChange={setPage} />
+    </div>
+  )
+}
+
+function SpecimensTab({ species }) {
+  const totalCount = species.specimens.length
+  const [page, setPage] = useState(1)
+  const [province, setProvince] = useState('All Provinces')
+  const [repository, setRepository] = useState('All Repositories')
+  const [sequencingPlatform, setSequencingPlatform] = useState('All Platforms')
+
+  return (
+    <div className="space-y-7">
+      <div className="space-y-4">
+        <h2 className="font-serif text-[clamp(2.8rem,4vw,4.2rem)] leading-[0.95] text-black">
+          Specimens <span className="text-brand-700">({totalCount})</span>
+        </h2>
+        <p className="max-w-4xl text-[1.05rem] leading-7 text-[var(--app-muted)]">
+          Individual specimen records collected for this species.
+        </p>
+      </div>
+
+      <div className="space-y-4">
+        <div className="flex flex-col gap-4 xl:flex-row xl:items-end xl:justify-between">
+          <div className="flex flex-col gap-4 lg:flex-row lg:flex-wrap lg:items-end xl:flex-1 xl:flex-nowrap">
+            <SearchInput placeholder="Search by.." className="w-full lg:max-w-[328px]" />
+
+            <SelectWithChevron value={province} onChange={(event) => setProvince(event.target.value)}>
+              <option>All Provinces</option>
+              <option>Cebu</option>
+              <option>Bohol</option>
+              <option>Palawan</option>
+            </SelectWithChevron>
+
+            <SelectWithChevron value={repository} onChange={(event) => setRepository(event.target.value)}>
+              <option>All Repositories</option>
+              <option>The Marine Science Institute (MSI)</option>
+              <option>University Repository</option>
+            </SelectWithChevron>
+
+            <SelectWithChevron
+              value={sequencingPlatform}
+              onChange={(event) => setSequencingPlatform(event.target.value)}
+            >
+              <option>All Platforms</option>
+              <option>Novaseq 6000</option>
+              <option>Oxford Nanopore</option>
+              <option>PacBio</option>
+            </SelectWithChevron>
+          </div>
+
+          <div className="inline-flex items-stretch self-start overflow-hidden rounded-2xl border border-[var(--app-border)] bg-white shadow-sm xl:self-auto">
+            <button
+              type="button"
+              className="px-5 py-3 text-sm font-medium text-brand-700 transition hover:bg-brand-50"
+              onClick={() => {
+                // mock-only action
+              }}
+            >
+              Apply Filter
+            </button>
+            <div className="w-px bg-[var(--app-border)]" />
+            <button
+              type="button"
+              className="px-5 py-3 text-sm font-medium text-[var(--app-muted)] transition hover:bg-brand-50 hover:text-brand-700"
+              onClick={() => {
+                setProvince('All Provinces')
+                setRepository('All Repositories')
+                setSequencingPlatform('All Platforms')
+              }}
+            >
+              Reset
+            </button>
+          </div>
+        </div>
+
+        <div className="flex justify-start">
+          <Button variant="outline" size="md" className="min-w-[106px] gap-2 px-5">
+            Export
+            <Download className="h-4 w-4" />
+          </Button>
+        </div>
+      </div>
+
+      <div className="overflow-hidden rounded-2xl border border-[var(--app-border)] bg-white shadow-sm">
+        <div className="overflow-x-auto">
+          <table className="min-w-[1100px] w-full border-collapse">
+            <thead className="bg-brand-50">
+              <tr className="text-left text-sm font-semibold text-brand-800">
+                <th className="px-5 py-4">Specimen ID</th>
+                <th className="px-5 py-4">Author</th>
+                <th className="px-5 py-4">Repository</th>
+                <th className="px-5 py-4">Province</th>
+                <th className="px-5 py-4">Tissue Source</th>
+                <th className="px-5 py-4">Sequencing Platform</th>
+                <th className="px-5 py-4">Total Conopeptide Sequences</th>
+              </tr>
+            </thead>
+            <tbody>
+              {species.specimens.map((specimen) => (
+                <tr
+                  key={specimen.specimenId}
+                  className="border-t border-[var(--app-border)] transition hover:bg-brand-50/60"
+                >
+                  <td className="px-5 py-4 align-top">
+                    <div className="flex items-center gap-3">
+                      <div>
+                        <p className="whitespace-nowrap text-[1.02rem] font-semibold text-brand-700">
+                          {specimen.specimenId}
+                        </p>
+                      </div>
+                    </div>
+                  </td>
+                  <td className="px-5 py-4 align-top text-[var(--app-text)]">{specimen.author}</td>
+                  <td className="px-5 py-4 align-top text-[var(--app-text)]">{specimen.repository}</td>
+                  <td className="px-5 py-4 align-top text-[var(--app-text)]">{specimen.province}</td>
+                  <td className="px-5 py-4 align-top text-[var(--app-text)]">{specimen.tissueSource}</td>
+                  <td className="px-5 py-4 align-top text-[var(--app-text)]">{specimen.sequencingPlatform}</td>
+                  <td className="px-5 py-4 align-top text-[var(--app-text)]">
+                    {specimen.totalConopeptideSequences}
+                  </td>
                 </tr>
               ))}
             </tbody>
@@ -380,6 +487,8 @@ export default function SpeciesDetailPage() {
         </div>
       ) : activeTab === 'conopeptides' ? (
         <ConopeptidesTab species={species} />
+      ) : activeTab === 'specimens' ? (
+        <SpecimensTab species={species} />
       ) : (
         <Card className="border-dashed bg-white/80 text-center text-[var(--app-muted)]">
           This section is not implemented yet.

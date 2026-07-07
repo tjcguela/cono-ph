@@ -188,7 +188,7 @@ function DiscoveryLineChart() {
               className="rounded-full border border-[var(--app-border)] bg-[#f7f7f8] p-2 text-[var(--app-muted)] shadow-sm transition hover:bg-brand-50 hover:text-black"
               aria-label="Previous year range"
             >
-              <ChevronLeft className="h-4 w-4" />
+              <ChevronLeft className="h-4 w-4 shrink-0" />
             </button>
             <button
               type="button"
@@ -196,7 +196,7 @@ function DiscoveryLineChart() {
               className="rounded-full border border-[var(--app-border)] bg-[#f7f7f8] p-2 text-[var(--app-muted)] shadow-sm transition hover:bg-brand-50 hover:text-black"
               aria-label="Next year range"
             >
-              <ChevronRight className="h-4 w-4" />
+              <ChevronRight className="h-4 w-4 shrink-0" />
             </button>
             <button
               type="button"

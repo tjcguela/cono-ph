@@ -25,7 +25,7 @@ export default function Pagination({ page = 1, totalPages = 1, onPageChange, cla
         onClick={() => onPageChange?.(Math.max(1, page - 1))}
         disabled={page <= 1}
       >
-        <ChevronLeft className="mr-1 h-4 w-4" />
+        <ChevronLeft className="mr-1.5 h-4 w-4 shrink-0" />
         Previous
       </Button>
 
@@ -53,7 +53,7 @@ export default function Pagination({ page = 1, totalPages = 1, onPageChange, cla
         disabled={page >= totalPages}
       >
         Next
-        <ChevronRight className="ml-1 h-4 w-4" />
+        <ChevronRight className="ml-1.5 h-4 w-4 shrink-0" />
       </Button>
     </div>
   )

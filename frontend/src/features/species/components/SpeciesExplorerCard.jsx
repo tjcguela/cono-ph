@@ -62,7 +62,7 @@ export default function SpeciesExplorerCard({ species }) {
       </div>
 
       <div className="flex items-center justify-end self-stretch text-[var(--app-muted)] lg:w-8">
-        <ChevronRight className="h-6 w-6 transition group-hover:translate-x-0.5 group-hover:text-black" />
+        <ChevronRight className="h-6 w-6 shrink-0 transition group-hover:translate-x-0.5 group-hover:text-black" />
       </div>
     </Card>
   )

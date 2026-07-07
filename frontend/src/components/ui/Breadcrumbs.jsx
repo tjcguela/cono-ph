@@ -21,7 +21,7 @@ export default function Breadcrumbs({ items = [], className }) {
                   {item.label}
                 </span>
               )}
-              {!isLast ? <ChevronRight className="h-4 w-4" /> : null}
+              {!isLast ? <ChevronRight className="h-4 w-4 shrink-0" /> : null}
             </li>
           )
         })}

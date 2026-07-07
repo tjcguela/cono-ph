@@ -8,7 +8,7 @@ export default function SpeciesExplorerPagination() {
   return (
     <div className="flex flex-wrap items-center justify-center gap-3 pt-4">
       <Button variant="ghost" size="sm" className="text-slate-300" disabled>
-        <ChevronLeft className="mr-1 h-4 w-4" />
+        <ChevronLeft className="mr-1.5 h-4 w-4 shrink-0" />
         Previous
       </Button>
 
@@ -36,7 +36,7 @@ export default function SpeciesExplorerPagination() {
 
       <Button variant="ghost" size="sm" className="text-[var(--app-text)]">
         Next
-        <ChevronRight className="ml-1 h-4 w-4" />
+        <ChevronRight className="ml-1.5 h-4 w-4 shrink-0" />
       </Button>
     </div>
   )
