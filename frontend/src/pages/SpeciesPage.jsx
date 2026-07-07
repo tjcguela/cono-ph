@@ -1,5 +1,5 @@
-import RoutePlaceholder from '@/components/common/RoutePlaceholder'
+import SpeciesExplorerPage from '@/features/species/SpeciesExplorerPage'
 
 export default function SpeciesPage() {
-  return <RoutePlaceholder title="Species" />
+  return <SpeciesExplorerPage />
 }
