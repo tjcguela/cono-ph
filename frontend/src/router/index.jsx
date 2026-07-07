@@ -6,6 +6,7 @@ import BiomarkersPage from '@/pages/BiomarkersPage'
 import ConopeptidesPage from '@/pages/ConopeptidesPage'
 import HomePage from '@/pages/HomePage'
 import PublicationsPage from '@/pages/PublicationsPage'
+import SpeciesDetailPage from '@/pages/SpeciesDetailPage'
 import SpeciesPage from '@/pages/SpeciesPage'
 import VisualizationPage from '@/pages/VisualizationPage'
 
@@ -16,6 +17,7 @@ export const router = createBrowserRouter([
       { path: '/', element: <HomePage /> },
       { path: '/about', element: <AboutPage /> },
       { path: '/species', element: <SpeciesPage /> },
+      { path: '/species/:speciesId', element: <SpeciesDetailPage /> },
       { path: '/conopeptides', element: <ConopeptidesPage /> },
       { path: '/biomarkers', element: <BiomarkersPage /> },
       { path: '/visualization', element: <VisualizationPage /> },
