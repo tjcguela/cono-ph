@@ -248,6 +248,106 @@ export const conopeptideTopAbundantRows = [
   },
 ]
 
+export const biomarkerOverviewBreadcrumbs = [
+  { label: 'Home', to: '/' },
+  { label: 'Visualization', to: '/visualization' },
+  { label: 'Biomarkers' },
+]
+
+export const biomarkerOverviewMeta = {
+  title: 'Biomarker Overview',
+  subtitle:
+    'Explore biomarker coverage, marker diversity, and sequencing completeness across Philippine cone snail species.',
+}
+
+export const biomarkerOverviewMetrics = [
+  {
+    icon: Database,
+    value: '312',
+    label: 'Total Biomarkers',
+  },
+  {
+    icon: Sprout,
+    value: '18',
+    label: 'Biomarker Types',
+  },
+  {
+    icon: FileCheck2,
+    value: '245',
+    label: 'Species with Biomarker Data',
+  },
+  {
+    icon: Globe2,
+    value: '76%',
+    label: 'Biomarker Coverage',
+  },
+]
+
+export const biomarkerTypeLegend = [
+  { label: 'COI', count: 98, percent: '31.4%', color: 'bg-slate-900' },
+  { label: '16S', count: 72, percent: '23.1%', color: 'bg-[#9eb8e8]' },
+  { label: '12S', count: 56, percent: '17.9%', color: 'bg-[#8be2b2]' },
+  { label: 'H3', count: 41, percent: '13.1%', color: 'bg-[#df9ee9]' },
+  { label: 'ITS', count: 29, percent: '9.3%', color: 'bg-[#aac0e4]' },
+  { label: 'Other', count: 16, percent: '5.2%', color: 'bg-brand-200' },
+]
+
+export const biomarkerCoverageData = [
+  { label: 'Species with biomarker data', value: 76 },
+  { label: 'Species without biomarker data', value: 24 },
+]
+
+export const biomarkerDensityByProvince = [
+  { label: 'Cebu', value: 98 },
+  { label: 'Batangas', value: 85 },
+  { label: 'Palawan', value: 64 },
+  { label: 'Bohol', value: 47 },
+  { label: 'Negros Occidental', value: 43 },
+]
+
+export const biomarkerSummaryRows = [
+  {
+    biomarkerId: 'BIOM-001',
+    markerType: 'COI',
+    species: 'Conus eburneus',
+    accession: 'MN908441',
+    sequenceLength: '658 bp',
+    province: 'Cebu',
+  },
+  {
+    biomarkerId: 'BIOM-002',
+    markerType: '16S',
+    species: 'Conus imperialis',
+    accession: 'MN908442',
+    sequenceLength: '571 bp',
+    province: 'Batangas',
+  },
+  {
+    biomarkerId: 'BIOM-003',
+    markerType: 'H3',
+    species: 'Conus tessulatus',
+    accession: 'MN908443',
+    sequenceLength: '328 bp',
+    province: 'Palawan',
+  },
+  {
+    biomarkerId: 'BIOM-004',
+    markerType: 'ITS',
+    species: 'Conus mustelinus',
+    accession: 'MN908444',
+    sequenceLength: '489 bp',
+    province: 'Bohol',
+  },
+  {
+    biomarkerId: 'BIOM-005',
+    markerType: '12S',
+    species: 'Conus miles',
+    accession: 'MN908445',
+    sequenceLength: '412 bp',
+    province: 'Negros Occidental',
+  },
+]
+
 export const speciesOverviewBreadcrumbs = [
   { label: 'Home', to: '/' },
   { label: 'Visualization', to: '/visualization' },
