@@ -1,12 +1,16 @@
 import {
   Database,
+  FileCheck2,
   Globe2,
   BarChart3,
+  Layers3,
   MapPinned,
   PieChart,
   Sprout,
 } from 'lucide-react'
 import visualizationMapPreview from '@/assets/map.png'
+
+export { visualizationMapPreview }
 
 export const visualizationBreadcrumbs = [
   { label: 'Home', to: '/' },
@@ -118,3 +122,77 @@ export const visualizationFilterOptions = {
 }
 
 export const visualizationStatusOptions = ['Published', 'Under Review', 'Unpublished']
+
+export const speciesOverviewBreadcrumbs = [
+  { label: 'Home', to: '/' },
+  { label: 'Visualization', to: '/visualization' },
+  { label: 'Species' },
+]
+
+export const speciesOverviewMeta = {
+  title: 'Species Overview',
+  subtitle: 'Explore species diversity, distribution, and sequencing coverage.',
+}
+
+export const speciesOverviewMetrics = [
+  {
+    icon: Database,
+    value: '127',
+    label: 'Total Species',
+  },
+  {
+    icon: Layers3,
+    value: '24',
+    label: 'Subgenera',
+  },
+  {
+    icon: MapPinned,
+    value: '82',
+    label: 'Provinces',
+  },
+  {
+    icon: FileCheck2,
+    value: '127',
+    label: 'Species with Sequence Data',
+  },
+]
+
+export const speciesProvinceLegend = [
+  { label: '> 20 species', color: 'bg-[#f0c4cf]' },
+  { label: '11 - 20 species', color: 'bg-[#9dd6f4]' },
+  { label: '6 - 10 species', color: 'bg-[#80e72a]' },
+  { label: '1 - 5 species', color: 'bg-[#dea0ef]' },
+  { label: '0 species', color: 'bg-[#b8cbea]' },
+]
+
+export const speciesTopSequencedSpecies = [
+  { name: 'Conus eburneus', value: 12 },
+  { name: 'Conus imperialis', value: 10 },
+  { name: 'Conus tessulatus', value: 8 },
+  { name: 'Conus mustelinus', value: 7 },
+  { name: 'Conus miles', value: 6 },
+  { name: 'Conus capitaneus', value: 6 },
+  { name: 'Conus magus', value: 5 },
+  { name: 'Conus striolatus', value: 5 },
+  { name: 'Conus rolani', value: 5 },
+  { name: 'Conus tribblei', value: 4 },
+]
+
+export const speciesSubgenusLegend = [
+  { label: 'Tesseliconus', color: 'bg-slate-900' },
+  { label: 'Stephanoconus', color: 'bg-[#9db6df]' },
+  { label: 'Rhizoconus', color: 'bg-[#90e0ac]' },
+  { label: 'Pionoconus', color: 'bg-[#df9ee9]' },
+  { label: 'Other', color: 'bg-[#aac0e4]' },
+]
+
+export const speciesProvinceCoverage = [
+  { label: 'A', value: 64 },
+  { label: 'B', value: 80 },
+  { label: 'C', value: 40 },
+  { label: 'D', value: 50 },
+  { label: 'E', value: 64 },
+  { label: 'F', value: 24 },
+  { label: 'G', value: 90 },
+  { label: 'H', value: 64 },
+]
