@@ -3,10 +3,7 @@ import { Link } from 'react-router-dom'
 import Button from '@/components/ui/Button'
 import Card from '@/components/ui/Card'
 import ChartCard from '@/features/visualization/components/ChartCard'
-import {
-  BarChartPlaceholder,
-  DonutChartPlaceholder,
-} from '@/features/visualization/components/ChartPlaceholders'
+import { DonutChartPlaceholder } from '@/features/visualization/components/ChartPlaceholders'
 import MetricCard from '@/features/visualization/components/MetricCard'
 import VisualizationLayout from '@/features/visualization/components/VisualizationLayout'
 import {
@@ -46,6 +43,7 @@ function InsightCard({ children }) {
 
 function OverviewPreviewCard({ card }) {
   const showStaticMap = Boolean(card.previewImage)
+  const Icon = card.icon
 
   return (
     <ChartCard
@@ -54,9 +52,16 @@ function OverviewPreviewCard({ card }) {
       viewAllTo={card.viewAllTo}
       className="h-full"
     >
-      <div className="space-y-5">
+      <div className="flex h-full flex-col gap-5">
         <section className="space-y-3">
-          <p className="text-lg font-medium text-[var(--app-muted)]">{card.previewTitle}</p>
+          <div className="flex items-center gap-3">
+            {Icon ? (
+              <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-brand-50 text-brand-700">
+                <Icon className="h-5 w-5" strokeWidth={1.8} />
+              </span>
+            ) : null}
+            <p className="text-lg font-medium text-[var(--app-muted)]">{card.previewTitle}</p>
+          </div>
 
           {showStaticMap ? (
             <div className="overflow-hidden rounded-3xl border border-[var(--app-border)] bg-white">
@@ -69,32 +74,18 @@ function OverviewPreviewCard({ card }) {
           ) : (
             <div className="overflow-hidden rounded-3xl border border-[var(--app-border)] bg-white p-3">
               <div className="rounded-2xl border border-dashed border-brand-200 bg-brand-50/40 p-3">
-                {card.id === 'conopeptides' ? (
-                  <DonutChartPlaceholder className="min-h-[300px]" />
-                ) : (
-                  <DonutChartPlaceholder className="min-h-[300px]" />
-                )}
+                <DonutChartPlaceholder className="min-h-[300px]" />
               </div>
             </div>
           )}
         </section>
 
-        {card.secondaryTitle ? (
-          <div className="rounded-2xl border border-[var(--app-border)] bg-brand-50/40 p-3">
-            {card.id === 'conopeptides' ? (
-              <BarChartPlaceholder className="min-h-[220px]" />
-            ) : (
-              <div className="flex min-h-[220px] items-center justify-center rounded-2xl border border-dashed border-brand-200 bg-white/70 px-4 text-center text-sm text-[var(--app-muted)]">
-                {card.secondaryTitle}
-              </div>
-            )}
-          </div>
-        ) : null}
+        <div className="flex-1">
+          <PreviewList title={card.listTitle} items={card.listItems} />
+        </div>
 
-        <PreviewList title={card.listTitle} items={card.listItems} />
-
-        <div className="flex justify-center pt-1">
-          <Button as={Link} to={card.ctaTo} variant="outline" size="lg" className="min-w-56">
+        <div className="pt-1">
+          <Button as={Link} to={card.ctaTo} variant="outline" size="lg" className="w-full sm:w-auto sm:min-w-56">
             {card.ctaLabel}
           </Button>
         </div>
@@ -110,7 +101,24 @@ export default function VisualizationPage() {
       title={visualizationMeta.title}
       subtitle={visualizationMeta.subtitle}
     >
-      <section className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+      <section className="rounded-[1.75rem] border border-brand-100 bg-white/80 p-5 shadow-sm sm:p-6">
+        <div className="flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
+          <div className="max-w-3xl space-y-2">
+            <p className="text-xs font-semibold uppercase tracking-[0.24em] text-brand-700">
+              Visualization Gateway
+            </p>
+            <p className="text-sm leading-6 text-[var(--app-muted)] sm:text-base">
+              Start with the broadest species view, then move into conopeptides and biomarkers.
+            </p>
+          </div>
+
+          <Button as={Link} to={visualizationMeta.primaryCtaTo} size="lg" className="min-w-56">
+            {visualizationMeta.primaryCtaLabel}
+          </Button>
+        </div>
+      </section>
+
+      <section className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
         {visualizationMetrics.map((metric) => (
           <MetricCard
             key={metric.label}
@@ -128,8 +136,8 @@ export default function VisualizationPage() {
         ))}
       </section>
 
-      <Card className="space-y-5 p-5 sm:p-6">
-        <div className="grid gap-4 lg:grid-cols-[260px_minmax(0,1fr)] lg:items-start">
+      <Card className="space-y-5 bg-brand-50/25 p-5 sm:p-6">
+        <div className="grid gap-4 lg:grid-cols-[280px_minmax(0,1fr)] lg:items-start">
           <div className="space-y-2">
             <h2 className="text-3xl leading-none text-black">Cross-Data Insights</h2>
             <p className="text-sm leading-6 text-[var(--app-muted)] sm:text-base">

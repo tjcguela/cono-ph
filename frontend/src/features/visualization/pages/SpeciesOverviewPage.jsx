@@ -20,7 +20,7 @@ import {
 function LegendItem({ label, color }) {
   return (
     <li className="flex items-center gap-3 text-sm text-[var(--app-muted)]">
-      <span className={`h-6 w-6 rounded-sm border border-[var(--app-border)] ${color}`} />
+      <span className={`h-5 w-5 shrink-0 rounded-sm border border-[var(--app-border)] ${color}`} />
       <span>{label}</span>
     </li>
   )
@@ -54,54 +54,82 @@ export default function SpeciesOverviewPage() {
       title={speciesOverviewMeta.title}
       subtitle={speciesOverviewMeta.subtitle}
     >
-      <section className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+      <section className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
         {speciesOverviewMetrics.map((metric) => (
-          <MetricCard key={metric.label} icon={metric.icon} value={metric.value} label={metric.label} />
+          <MetricCard
+            key={metric.label}
+            icon={metric.icon}
+            value={metric.value}
+            label={metric.label}
+            className="p-3 sm:p-4"
+          />
         ))}
       </section>
 
-      <ChartCard title="Species Distribution by Province">
-        <div className="grid gap-6 xl:grid-cols-[minmax(0,1fr)_220px]">
-          <div className="space-y-5">
+      <ChartCard
+        title="Species Distribution by Province"
+        subtitle="Color groups indicate provincial species counts; darker concentrations mean more recorded species."
+      >
+        <div className="grid gap-5 xl:grid-cols-[minmax(0,1fr)_240px] xl:items-start">
+          <div className="space-y-4">
             <div className="relative overflow-hidden rounded-3xl border border-[var(--app-border)] bg-white">
               <img
                 src={visualizationMapPreview}
                 alt="Species distribution by province preview map"
-                className="h-[650px] w-full object-cover object-center"
+                className="h-[620px] w-full object-cover object-center"
               />
               <ZoomControl />
             </div>
 
-            <div className="grid gap-5 lg:grid-cols-[260px_minmax(0,1fr)] lg:items-start">
-              <div className="space-y-3">
-                <h3 className="text-base font-medium text-[var(--app-muted)]">Legend</h3>
-                <ul className="space-y-3">
-                  {speciesProvinceLegend.map((item) => (
-                    <LegendItem key={item.label} label={item.label} color={item.color} />
-                  ))}
-                </ul>
-              </div>
+            <p className="max-w-3xl text-sm leading-6 text-[var(--app-muted)]">
+              Use the map to compare distribution density by province before scanning the supporting
+              rankings and coverage summary below.
+            </p>
+          </div>
+
+          <div className="rounded-3xl border border-[var(--app-border)] bg-brand-50/40 p-4 sm:p-5">
+            <div className="space-y-3">
+              <h3 className="text-base font-medium text-[var(--app-muted)]">Legend</h3>
+              <p className="text-sm leading-6 text-[var(--app-muted)]">
+                Color intensity reflects species count groups in each province.
+              </p>
+              <ul className="space-y-3 pt-1">
+                {speciesProvinceLegend.map((item) => (
+                  <LegendItem key={item.label} label={item.label} color={item.color} />
+                ))}
+              </ul>
             </div>
           </div>
         </div>
       </ChartCard>
 
       <section className="grid gap-6 xl:grid-cols-2">
-        <ChartCard title="Top 10 Most Sequenced Species" viewAllLabel="View full list" viewAllTo="/visualization/species">
+        <ChartCard
+          title="Top 10 Most Sequenced Species"
+          viewAllLabel="View full list"
+          viewAllTo="/visualization/species"
+          className="h-full"
+        >
           <RankedListPlaceholder
             items={speciesTopSequencedSpecies.map((item) => ({ label: item.name, value: item.value }))}
             leftHeader="Species"
             rightHeader="Number of Sequences"
+            className="h-full"
           />
         </ChartCard>
 
-        <ChartCard title="Species by Subgenus" viewAllLabel="View full list" viewAllTo="/visualization/species">
-          <div className="space-y-6">
+        <ChartCard
+          title="Species by Subgenus"
+          viewAllLabel="View full list"
+          viewAllTo="/visualization/species"
+          className="h-full"
+        >
+          <div className="flex h-full flex-col gap-5">
             <div className="grid place-items-center">
-              <DonutChartPlaceholder className="min-h-[260px] w-full" />
+              <DonutChartPlaceholder className="min-h-[240px] w-full" />
             </div>
 
-            <div className="space-y-4">
+            <div className="space-y-3">
               <ul className="grid gap-3 sm:grid-cols-2">
                 {speciesSubgenusLegend.map((item) => (
                   <LegendItem key={item.label} label={item.label} color={item.color} />
@@ -112,11 +140,15 @@ export default function SpeciesOverviewPage() {
         </ChartCard>
       </section>
 
-      <ChartCard title="Sequencing Coverage Across Provinces">
+      <ChartCard
+        title="Sequencing Coverage Across Provinces"
+        subtitle="A lightweight support chart for province-level sequencing spread."
+      >
         <BarChartPlaceholder
           items={speciesProvinceCoverage}
           yAxisLabel="Number of Species"
           xAxisLabel="Province"
+          className="min-h-[340px]"
         />
       </ChartCard>
     </VisualizationLayout>

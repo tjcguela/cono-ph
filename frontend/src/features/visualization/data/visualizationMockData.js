@@ -20,7 +20,9 @@ export const visualizationBreadcrumbs = [
 export const visualizationMeta = {
   title: 'Data Visualization',
   subtitle:
-    'Shared layout foundation for biodiversity, conopeptide, and biomarker visual summaries.',
+    'Explore Philippine cone snail biodiversity, conopeptide diversity, and biomarker coverage through interactive visual summaries.',
+  primaryCtaLabel: 'Explore Species Overview',
+  primaryCtaTo: '/visualization/species',
 }
 
 export const visualizationMetrics = [
@@ -28,19 +30,25 @@ export const visualizationMetrics = [
     icon: Database,
     value: '127',
     label: 'Total Species',
-    description: 'Mock summary label for the shared visualization shell.',
+    description: 'Across 24 subgenera and 56 provinces.',
   },
   {
     icon: Sprout,
     value: '3,671',
     label: 'Conopeptide Precursors',
-    description: 'Placeholder metric for future conopeptide analytics.',
+    description: 'From 67 superfamilies and 1,248 unique peptides.',
   },
   {
-    icon: Globe2,
+    icon: BarChart3,
     value: '312',
     label: 'Biomarkers',
-    description: 'Placeholder metric for future biomarker analytics.',
+    description: '18 marker types across 245 species.',
+  },
+  {
+    icon: FileCheck2,
+    value: '76%',
+    label: 'Biomarker Coverage',
+    description: 'Species with at least one biomarker recorded.',
   },
 ]
 
@@ -71,7 +79,6 @@ export const visualizationOverviewCards = [
     viewAllLabel: 'View all',
     viewAllTo: '/visualization/conopeptides',
     previewTitle: 'Conopeptide Superfamily Distribution',
-    secondaryTitle: 'Precursor Length Distribution',
     listTitle: 'Top Species',
     listItems: [
       { name: 'Conus eburneus', value: '12' },
@@ -90,7 +97,6 @@ export const visualizationOverviewCards = [
     viewAllLabel: 'View all',
     viewAllTo: '/visualization/biomarkers',
     previewTitle: 'Marker Type Distribution',
-    secondaryTitle: 'Species with Biomarker Coverage',
     listTitle: 'Top Species',
     listItems: [
       { name: 'Conus eburneus', value: '12' },

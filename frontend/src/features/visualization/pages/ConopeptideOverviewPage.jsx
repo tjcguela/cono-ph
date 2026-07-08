@@ -36,22 +36,37 @@ export default function ConopeptideOverviewPage() {
       title={conopeptideOverviewMeta.title}
       subtitle={conopeptideOverviewMeta.subtitle}
     >
-      <section className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+      <section className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
         {conopeptideOverviewMetrics.map((metric) => (
-          <MetricCard key={metric.label} icon={metric.icon} value={metric.value} label={metric.label} />
+          <MetricCard
+            key={metric.label}
+            icon={metric.icon}
+            value={metric.value}
+            label={metric.label}
+            className="p-3 sm:p-4"
+          />
         ))}
       </section>
 
-      <section className="grid gap-6 xl:grid-cols-2">
-        <ChartCard title="Conopeptide Superfamily Distribution" viewAllLabel="View full list" viewAllTo="/visualization/conopeptides">
-          <div className="grid gap-6 xl:grid-cols-[minmax(0,1fr)_320px] xl:items-center">
+      <section className="grid gap-5 xl:grid-cols-[minmax(0,1.08fr)_minmax(0,0.92fr)] xl:items-start">
+        <ChartCard
+          title="Conopeptide Superfamily Distribution"
+          subtitle="Composition-first view across the dominant superfamilies."
+          viewAllLabel="View full list"
+          viewAllTo="/visualization/conopeptides"
+          className="h-full"
+        >
+          <div className="grid gap-5 xl:grid-cols-[minmax(0,1fr)_300px] xl:items-center">
             <div className="grid place-items-center">
-              <DonutChartPlaceholder className="min-h-[320px] w-full max-w-[420px]" />
+              <DonutChartPlaceholder className="min-h-[340px] w-full max-w-[430px]" />
             </div>
 
-            <div className="space-y-4">
+            <div className="space-y-3 rounded-3xl border border-[var(--app-border)] bg-brand-50/40 p-4 sm:p-5">
               <h3 className="text-base font-medium text-[var(--app-muted)]">Legend</h3>
-              <ul className="space-y-4">
+              <p className="text-sm leading-6 text-[var(--app-muted)]">
+                Counts and percentages reflect the relative abundance of each superfamily group.
+              </p>
+              <ul className="space-y-3 pt-1">
                 {conopeptideSuperfamilyLegend.map((item) => (
                   <LegendItem key={item.label} {...item} />
                 ))}
@@ -60,26 +75,39 @@ export default function ConopeptideOverviewPage() {
           </div>
         </ChartCard>
 
-        <ChartCard title="Precursor Length Distribution" viewAllLabel="View full list" viewAllTo="/visualization/conopeptides">
+        <ChartCard
+          title="Precursor Length Distribution"
+          subtitle="A paired view of peptide length bins to compare against superfamily composition."
+          viewAllLabel="View full list"
+          viewAllTo="/visualization/conopeptides"
+          className="h-full"
+        >
           <BarChartPlaceholder
             items={conopeptideLengthBins}
             yAxisLabel="Number of Precursors"
             xAxisLabel="Length (Amino Acids)"
+            className="min-h-[420px]"
           />
         </ChartCard>
       </section>
 
-      <ChartCard title="Top 10 Most Abundant Conopeptides" viewAllLabel="View full list" viewAllTo="/visualization/conopeptides">
+      <ChartCard
+        title="Top 10 Most Abundant Conopeptides"
+        subtitle="Ranked abundance table with a research-oriented reading order."
+        viewAllLabel="View full list"
+        viewAllTo="/visualization/conopeptides"
+      >
         <Table
           columns={['Conopeptide / Toxin Name', 'Superfamily', 'Framework', 'Count', 'Linked Species']}
+          className="shadow-none"
         >
           {conopeptideTopAbundantRows.map((row) => (
             <tr key={`${row.name}-${row.count}`} className="border-b border-[var(--app-border)] last:border-b-0">
-              <td className="px-4 py-3 font-medium text-[var(--app-text)]">{row.name}</td>
-              <td className="px-4 py-3 text-[var(--app-muted)]">{row.superfamily}</td>
-              <td className="px-4 py-3 text-[var(--app-muted)]">{row.framework}</td>
-              <td className="px-4 py-3 text-[var(--app-muted)]">{row.count}</td>
-              <td className="px-4 py-3 text-[var(--app-muted)]">{row.species}</td>
+              <td className="px-4 py-4 font-medium text-[var(--app-text)]">{row.name}</td>
+              <td className="px-4 py-4 text-[var(--app-muted)]">{row.superfamily}</td>
+              <td className="px-4 py-4 text-[var(--app-muted)]">{row.framework}</td>
+              <td className="px-4 py-4 text-[var(--app-muted)]">{row.count}</td>
+              <td className="px-4 py-4 text-[var(--app-muted)]">{row.species}</td>
             </tr>
           ))}
         </Table>
