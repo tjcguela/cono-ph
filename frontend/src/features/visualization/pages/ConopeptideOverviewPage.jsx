@@ -1,8 +1,12 @@
 import ChartCard from '@/features/visualization/components/ChartCard'
-import { DonutChartPlaceholder } from '@/features/visualization/components/ChartPlaceholders'
+import {
+  BarChartPlaceholder,
+  DonutChartPlaceholder,
+} from '@/features/visualization/components/ChartPlaceholders'
 import MetricCard from '@/features/visualization/components/MetricCard'
 import VisualizationLayout from '@/features/visualization/components/VisualizationLayout'
 import VisualizationSidebar from '@/features/visualization/components/VisualizationSidebar'
+import Table from '@/components/ui/Table'
 import {
   conopeptideLengthBins,
   conopeptideOverviewBreadcrumbs,
@@ -23,66 +27,6 @@ function LegendItem({ label, count, percent, color }) {
         {count} ({percent})
       </span>
     </li>
-  )
-}
-
-function LengthBarChart() {
-  const maxValue = Math.max(...conopeptideLengthBins.map((item) => item.value))
-
-  return (
-    <div className="space-y-4">
-      <div className="grid grid-cols-[44px_minmax(0,1fr)] gap-4">
-        <div className="flex h-[320px] flex-col justify-between pb-10 pt-4 text-right text-xs text-[var(--app-muted)]">
-          <span>50</span>
-          <span>40</span>
-          <span>30</span>
-          <span>20</span>
-          <span>10</span>
-          <span>0</span>
-        </div>
-
-        <div className="relative h-[320px] rounded-3xl border border-[var(--app-border)] bg-white px-5 pb-12 pt-6">
-          <div className="absolute inset-x-5 top-6 h-px bg-[rgba(226,226,212,0.9)]" />
-          <div className="absolute inset-x-5 top-[28%] h-px bg-[rgba(226,226,212,0.7)]" />
-          <div className="absolute inset-x-5 top-[48%] h-px bg-[rgba(226,226,212,0.7)]" />
-          <div className="absolute inset-x-5 top-[68%] h-px bg-[rgba(226,226,212,0.7)]" />
-          <div className="absolute inset-x-5 top-[88%] h-px bg-[rgba(226,226,212,0.7)]" />
-
-          <div className="flex h-full items-end gap-5">
-            {conopeptideLengthBins.map((bin) => (
-              <div key={bin.label} className="flex flex-1 flex-col items-center justify-end gap-3">
-                <div className="flex w-full flex-1 items-end justify-center">
-                  <div
-                    className="w-12 rounded-t-md bg-brand-700 shadow-sm"
-                    style={{ height: `${(bin.value / maxValue) * 100}%` }}
-                  />
-                </div>
-                <span className="text-center text-xs text-[var(--app-muted)]">{bin.label}</span>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-
-      <div className="grid grid-cols-[44px_minmax(0,1fr)] gap-4">
-        <div className="text-right text-xs font-medium text-[var(--app-muted)]">Number of Precursors</div>
-        <div className="text-center text-sm font-semibold text-[var(--app-muted)]">
-          Length (Amino Acids)
-        </div>
-      </div>
-    </div>
-  )
-}
-
-function TableRow({ row }) {
-  return (
-    <tr className="border-b border-[var(--app-border)] last:border-b-0">
-      <td className="px-4 py-3 font-medium text-[var(--app-text)]">{row.name}</td>
-      <td className="px-4 py-3 text-[var(--app-muted)]">{row.superfamily}</td>
-      <td className="px-4 py-3 text-[var(--app-muted)]">{row.framework}</td>
-      <td className="px-4 py-3 text-[var(--app-muted)]">{row.count}</td>
-      <td className="px-4 py-3 text-[var(--app-muted)]">{row.species}</td>
-    </tr>
   )
 }
 
@@ -119,31 +63,28 @@ export default function ConopeptideOverviewPage() {
         </ChartCard>
 
         <ChartCard title="Precursor Length Distribution" viewAllLabel="View full list" viewAllTo="/visualization/conopeptides">
-          <LengthBarChart />
+          <BarChartPlaceholder
+            items={conopeptideLengthBins}
+            yAxisLabel="Number of Precursors"
+            xAxisLabel="Length (Amino Acids)"
+          />
         </ChartCard>
       </section>
 
       <ChartCard title="Top 10 Most Abundant Conopeptides" viewAllLabel="View full list" viewAllTo="/visualization/conopeptides">
-        <div className="overflow-hidden rounded-2xl border border-[var(--app-border)] bg-white">
-          <div className="overflow-x-auto">
-            <table className="min-w-full text-left text-sm">
-              <thead className="bg-brand-50/70 text-xs uppercase tracking-wide text-[var(--app-muted)]">
-                <tr>
-                  <th className="px-4 py-3 font-medium">Conopeptide / Toxin Name</th>
-                  <th className="px-4 py-3 font-medium">Superfamily</th>
-                  <th className="px-4 py-3 font-medium">Framework</th>
-                  <th className="px-4 py-3 font-medium">Count</th>
-                  <th className="px-4 py-3 font-medium">Linked Species</th>
-                </tr>
-              </thead>
-              <tbody>
-                {conopeptideTopAbundantRows.map((row) => (
-                  <TableRow key={`${row.name}-${row.count}`} row={row} />
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </div>
+        <Table
+          columns={['Conopeptide / Toxin Name', 'Superfamily', 'Framework', 'Count', 'Linked Species']}
+        >
+          {conopeptideTopAbundantRows.map((row) => (
+            <tr key={`${row.name}-${row.count}`} className="border-b border-[var(--app-border)] last:border-b-0">
+              <td className="px-4 py-3 font-medium text-[var(--app-text)]">{row.name}</td>
+              <td className="px-4 py-3 text-[var(--app-muted)]">{row.superfamily}</td>
+              <td className="px-4 py-3 text-[var(--app-muted)]">{row.framework}</td>
+              <td className="px-4 py-3 text-[var(--app-muted)]">{row.count}</td>
+              <td className="px-4 py-3 text-[var(--app-muted)]">{row.species}</td>
+            </tr>
+          ))}
+        </Table>
       </ChartCard>
     </VisualizationLayout>
   )

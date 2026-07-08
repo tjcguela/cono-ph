@@ -71,7 +71,6 @@ export const visualizationOverviewCards = [
     viewAllLabel: 'View all',
     viewAllTo: '/visualization/conopeptides',
     previewTitle: 'Conopeptide Superfamily Distribution',
-    previewType: 'donut',
     secondaryTitle: 'Precursor Length Distribution',
     listTitle: 'Top Species',
     listItems: [
@@ -91,7 +90,6 @@ export const visualizationOverviewCards = [
     viewAllLabel: 'View all',
     viewAllTo: '/visualization/biomarkers',
     previewTitle: 'Marker Type Distribution',
-    previewType: 'donut',
     secondaryTitle: 'Species with Biomarker Coverage',
     listTitle: 'Top Species',
     listItems: [

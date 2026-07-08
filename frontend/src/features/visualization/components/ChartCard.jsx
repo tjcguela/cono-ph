@@ -6,6 +6,7 @@ import { cn } from '@/utils/cn'
 
 export default function ChartCard({
   title,
+  subtitle,
   viewAllTo,
   viewAllLabel = 'View full list',
   children,
@@ -13,8 +14,11 @@ export default function ChartCard({
 }) {
   return (
     <Card className={cn('overflow-hidden p-0', className)}>
-      <div className="flex items-center justify-between gap-3 border-b border-[var(--app-border)] px-5 py-4 sm:px-6">
-        <h2 className="text-2xl leading-none text-[var(--app-text)]">{title}</h2>
+      <div className="flex items-start justify-between gap-3 border-b border-[var(--app-border)] px-5 py-4 sm:px-6">
+        <div className="space-y-1">
+          <h2 className="text-2xl leading-none text-[var(--app-text)]">{title}</h2>
+          {subtitle ? <p className="text-sm leading-6 text-[var(--app-muted)]">{subtitle}</p> : null}
+        </div>
         {viewAllTo ? (
           <Link
             to={viewAllTo}

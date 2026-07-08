@@ -1,6 +1,8 @@
 import ChartCard from '@/features/visualization/components/ChartCard'
 import {
+  BarChartPlaceholder,
   DonutChartPlaceholder,
+  RankedListPlaceholder,
 } from '@/features/visualization/components/ChartPlaceholders'
 import MetricCard from '@/features/visualization/components/MetricCard'
 import VisualizationLayout from '@/features/visualization/components/VisualizationLayout'
@@ -46,64 +48,7 @@ function ZoomControl() {
   )
 }
 
-function RankedSpeciesRow({ name, value, maxValue }) {
-  const width = `${Math.max((value / maxValue) * 100, 10)}%`
-
-  return (
-    <li className="grid grid-cols-[minmax(0,1fr)_minmax(0,1.4fr)_32px] items-center gap-4 text-sm">
-      <span className="truncate italic text-[var(--app-muted)]">{name}</span>
-      <div className="h-1.5 rounded-full bg-brand-100">
-        <div className="h-1.5 rounded-full bg-brand-700" style={{ width }} />
-      </div>
-      <span className="text-right text-[var(--app-muted)]">{value}</span>
-    </li>
-  )
-}
-
-function SpeciesCoverageChart() {
-  const maxValue = Math.max(...speciesProvinceCoverage.map((item) => item.value))
-  const yAxisMarks = [100, 75, 50, 25, 0]
-
-  return (
-    <div className="space-y-4">
-      <div className="grid grid-cols-[40px_minmax(0,1fr)] gap-3">
-        <div className="flex h-[340px] flex-col justify-between pb-8 pt-2 text-right text-xs text-[var(--app-muted)]">
-          {yAxisMarks.map((mark) => (
-            <span key={mark}>{mark}</span>
-          ))}
-        </div>
-
-        <div className="relative h-[340px] rounded-3xl border border-[var(--app-border)] bg-white px-5 pb-10 pt-6">
-          <div className="absolute inset-x-5 top-6 h-px bg-[linear-gradient(to_right,rgba(226,226,212,1)_0%,rgba(226,226,212,1)_100%)]" />
-          <div className="absolute inset-x-5 top-[30%] h-px bg-[rgba(226,226,212,0.7)]" />
-          <div className="absolute inset-x-5 top-[54%] h-px bg-[rgba(226,226,212,0.7)]" />
-          <div className="absolute inset-x-5 top-[78%] h-px bg-[rgba(226,226,212,0.7)]" />
-          <div className="absolute inset-x-5 bottom-10 h-px bg-[rgba(226,226,212,0.7)]" />
-
-          <div className="flex h-full items-end gap-6">
-            {speciesProvinceCoverage.map((item) => (
-              <div key={item.label} className="flex flex-1 flex-col items-center justify-end gap-3">
-                <div className="flex w-full flex-1 items-end justify-center">
-                  <div
-                    className="w-10 rounded-t-md bg-brand-700 shadow-sm"
-                    style={{ height: `${(item.value / maxValue) * 100}%` }}
-                  />
-                </div>
-                <span className="text-sm text-[var(--app-muted)]">{item.label}</span>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-
-      <div className="text-center text-sm font-semibold text-[var(--app-muted)]">Province</div>
-    </div>
-  )
-}
-
 export default function SpeciesOverviewPage() {
-  const maxSequences = Math.max(...speciesTopSequencedSpecies.map((item) => item.value))
-
   return (
     <VisualizationLayout
       breadcrumbs={speciesOverviewBreadcrumbs}
@@ -145,24 +90,11 @@ export default function SpeciesOverviewPage() {
 
       <section className="grid gap-6 xl:grid-cols-2">
         <ChartCard title="Top 10 Most Sequenced Species" viewAllLabel="View full list" viewAllTo="/visualization/species">
-          <div className="space-y-4">
-            <div className="grid grid-cols-[minmax(0,1fr)_minmax(0,1.4fr)_32px] gap-4 text-xs text-[var(--app-muted)]">
-              <span>Species</span>
-              <span>Number of Sequences</span>
-              <span />
-            </div>
-
-            <ul className="space-y-4">
-              {speciesTopSequencedSpecies.map((species) => (
-                <RankedSpeciesRow
-                  key={species.name}
-                  name={species.name}
-                  value={species.value}
-                  maxValue={maxSequences}
-                />
-              ))}
-            </ul>
-          </div>
+          <RankedListPlaceholder
+            items={speciesTopSequencedSpecies.map((item) => ({ label: item.name, value: item.value }))}
+            leftHeader="Species"
+            rightHeader="Number of Sequences"
+          />
         </ChartCard>
 
         <ChartCard title="Species by Subgenus" viewAllLabel="View full list" viewAllTo="/visualization/species">
@@ -183,9 +115,11 @@ export default function SpeciesOverviewPage() {
       </section>
 
       <ChartCard title="Sequencing Coverage Across Provinces">
-        <div className="space-y-4">
-          <SpeciesCoverageChart />
-        </div>
+        <BarChartPlaceholder
+          items={speciesProvinceCoverage}
+          yAxisLabel="Number of Species"
+          xAxisLabel="Province"
+        />
       </ChartCard>
     </VisualizationLayout>
   )
