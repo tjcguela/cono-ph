@@ -5,12 +5,11 @@ export default function VisualizationLayout({
   breadcrumbs = [],
   title,
   subtitle,
-  sidebar,
   children,
   className,
 }) {
   return (
-    <div className={cn('space-y-6 pb-8', className)}>
+    <div className={cn('mx-auto max-w-[1440px] space-y-8 pb-10', className)}>
       {breadcrumbs.length ? <Breadcrumbs items={breadcrumbs} /> : null}
 
       <header className="space-y-3">
@@ -26,10 +25,7 @@ export default function VisualizationLayout({
         </div>
       </header>
 
-      <div className="grid gap-6 lg:grid-cols-[300px_minmax(0,1fr)] lg:items-start">
-        <aside className="lg:sticky lg:top-28">{sidebar}</aside>
-        <main className="min-w-0 space-y-6">{children}</main>
-      </div>
+      <main className="min-w-0 space-y-8">{children}</main>
     </div>
   )
 }

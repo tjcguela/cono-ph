@@ -6,7 +6,6 @@ import {
 } from '@/features/visualization/components/ChartPlaceholders'
 import MetricCard from '@/features/visualization/components/MetricCard'
 import VisualizationLayout from '@/features/visualization/components/VisualizationLayout'
-import VisualizationSidebar from '@/features/visualization/components/VisualizationSidebar'
 import {
   speciesOverviewBreadcrumbs,
   speciesOverviewMeta,
@@ -54,7 +53,6 @@ export default function SpeciesOverviewPage() {
       breadcrumbs={speciesOverviewBreadcrumbs}
       title={speciesOverviewMeta.title}
       subtitle={speciesOverviewMeta.subtitle}
-      sidebar={<VisualizationSidebar />}
     >
       <section className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
         {speciesOverviewMetrics.map((metric) => (

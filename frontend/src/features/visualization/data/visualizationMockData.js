@@ -111,16 +111,6 @@ export const visualizationInsights = [
   'COI is the most widely used biomarker with 76% species coverage.',
 ]
 
-export const visualizationFilterOptions = {
-  project: ['All Projects', 'Project A', 'Project B', 'Project C'],
-  subgenus: ['All Subgenera', 'Subgenus 1', 'Subgenus 2', 'Subgenus 3'],
-  province: ['All Provinces', 'Province 1', 'Province 2', 'Province 3'],
-  municipality: ['All Municipalities', 'Municipality 1', 'Municipality 2', 'Municipality 3'],
-  sequencingPlatform: ['All Platforms', 'Illumina', 'Oxford Nanopore', 'PacBio'],
-}
-
-export const visualizationStatusOptions = ['Published', 'Under Review', 'Unpublished']
-
 export const conopeptideOverviewBreadcrumbs = [
   { label: 'Home', to: '/' },
   { label: 'Visualization', to: '/visualization' },

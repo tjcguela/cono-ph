@@ -9,7 +9,6 @@ import {
 } from '@/features/visualization/components/ChartPlaceholders'
 import MetricCard from '@/features/visualization/components/MetricCard'
 import VisualizationLayout from '@/features/visualization/components/VisualizationLayout'
-import VisualizationSidebar from '@/features/visualization/components/VisualizationSidebar'
 import {
   visualizationBreadcrumbs,
   visualizationInsights,
@@ -110,7 +109,6 @@ export default function VisualizationPage() {
       breadcrumbs={visualizationBreadcrumbs}
       title={visualizationMeta.title}
       subtitle={visualizationMeta.subtitle}
-      sidebar={<VisualizationSidebar />}
     >
       <section className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
         {visualizationMetrics.map((metric) => (
