@@ -3,6 +3,8 @@ import SpeciesExplorerCard from '@/features/species/components/SpeciesExplorerCa
 import SpeciesExplorerFilters from '@/features/species/components/SpeciesExplorerFilters'
 import SpeciesExplorerPagination from '@/features/species/components/SpeciesExplorerPagination'
 import Breadcrumbs from '@/components/ui/Breadcrumbs'
+import ErrorMessage from '@/components/common/ErrorMessage'
+import LoadingSpinner from '@/components/common/LoadingSpinner'
 import { useSpecies } from '@/hooks/useSpecies'
 import EmptyState from '@/components/ui/EmptyState'
 
@@ -15,7 +17,7 @@ export default function SpeciesExplorerPage() {
     order: 'DESC',
   })
 
-  const { species, loading, error, pagination } = useSpecies(filters)
+  const { species, loading, error, pagination, refetch } = useSpecies(filters)
 
   const handlePageChange = (newPage) => {
     setFilters((prev) => ({ ...prev, page: newPage }))
@@ -23,6 +25,10 @@ export default function SpeciesExplorerPage() {
 
   const handleFilterChange = (newFilters) => {
     setFilters((prev) => ({ ...prev, ...newFilters, page: 1 }))
+  }
+
+  const handleRetry = () => {
+    refetch()
   }
 
   return (
@@ -49,25 +55,39 @@ export default function SpeciesExplorerPage() {
         </aside>
 
         <section className="space-y-5">
+          {/* Header with count */}
           <div className="flex items-center justify-between">
             <p className="text-lg font-semibold text-brand-700">
-              {pagination.total > 0 ? `${pagination.total} Species Found` : 'No species found'}
+              {!loading && pagination.total > 0 
+                ? `${pagination.total} Species Found` 
+                : loading 
+                ? 'Loading...' 
+                : 'No species found'}
             </p>
-            {loading && <span className="text-sm text-[var(--app-muted)]">Loading...</span>}
           </div>
 
+          {/* Error Message */}
           {error && (
-            <div className="rounded-lg border border-red-200 bg-red-50 p-4">
-              <p className="text-sm text-red-700">{error}</p>
-            </div>
+            <ErrorMessage 
+              error={error} 
+              onDismiss={handleRetry}
+              title="Failed to load species"
+            />
           )}
 
-          {!loading && species.length === 0 ? (
+          {/* Loading State */}
+          {loading && <LoadingSpinner label="Loading species..." />}
+
+          {/* Empty State */}
+          {!loading && !error && species.length === 0 && (
             <EmptyState
               title="No species found"
               description="Try adjusting your search filters to find what you're looking for."
             />
-          ) : (
+          )}
+
+          {/* Species List */}
+          {!loading && species.length > 0 && (
             <div className="space-y-5">
               {species.map((item) => (
                 <SpeciesExplorerCard key={item.id} species={item} />
@@ -75,7 +95,8 @@ export default function SpeciesExplorerPage() {
             </div>
           )}
 
-          {species.length > 0 && (
+          {/* Pagination */}
+          {!loading && species.length > 0 && (
             <SpeciesExplorerPagination
               pagination={pagination}
               onPageChange={handlePageChange}

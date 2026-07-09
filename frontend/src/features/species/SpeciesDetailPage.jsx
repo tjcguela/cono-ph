@@ -2,6 +2,8 @@ import { useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import Breadcrumbs from '@/components/ui/Breadcrumbs'
 import Card from '@/components/ui/Card'
+import ErrorMessage from '@/components/common/ErrorMessage'
+import LoadingSpinner from '@/components/common/LoadingSpinner'
 import { useSpeciesDetail } from '@/hooks/useSpecies'
 import { cn } from '@/utils/cn'
 
@@ -96,7 +98,7 @@ function ComingSoonTab({ label }) {
 export default function SpeciesDetailPage() {
   const { id } = useParams()
   const [activeTab, setActiveTab] = useState('overview')
-  const { species, loading, error } = useSpeciesDetail(Number(id))
+  const { species, loading, error, refetch } = useSpeciesDetail(Number(id))
 
   if (loading) {
     return (
@@ -108,9 +110,7 @@ export default function SpeciesDetailPage() {
             { label: 'Loading...' },
           ]}
         />
-        <div className="text-center">
-          <p className="text-[var(--app-muted)]">Loading species details...</p>
-        </div>
+        <LoadingSpinner label="Loading species details..." />
       </div>
     )
   }
@@ -125,9 +125,16 @@ export default function SpeciesDetailPage() {
             { label: 'Error' },
           ]}
         />
-        <div className="rounded-lg border border-red-200 bg-red-50 p-4">
-          <p className="text-sm text-red-700">{error || 'Species not found'}</p>
-          <Link to="/species" className="text-sm text-red-600 underline hover:text-red-800">
+        <div className="space-y-4">
+          <ErrorMessage 
+            error={error || 'Species not found'} 
+            onDismiss={refetch}
+            title="Failed to load species details"
+          />
+          <Link 
+            to="/species" 
+            className="inline-block rounded-lg bg-brand-700 px-4 py-2 text-sm font-semibold text-white transition hover:bg-brand-800"
+          >
             Back to Species List
           </Link>
         </div>
