@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react'
-import { ArrowUpRight, Download } from 'lucide-react'
+import { ArrowUpRight, Check, Copy, Download } from 'lucide-react'
 import { useParams } from 'react-router-dom'
 
 import Breadcrumbs from '@/components/ui/Breadcrumbs'
@@ -11,10 +11,13 @@ import {
   defaultConopeptideDetailId,
 } from '@/features/conopeptides/data/conopeptideMockData'
 
-function DetailPanel({ title, children, className }) {
+function DetailPanel({ title, action, children, className }) {
   return (
     <Card className={cn('!p-0 overflow-hidden', className)}>
-      <div className="px-5 py-4 text-[1.05rem] font-semibold text-brand-700">{title}</div>
+      <div className="flex items-center justify-between gap-4 px-5 py-4">
+        <div className="text-[1.05rem] font-semibold text-brand-700">{title}</div>
+        {action}
+      </div>
       <div className="border-t border-[var(--app-border)] px-5 py-5">{children}</div>
     </Card>
   )
@@ -35,6 +38,9 @@ function PlaceholderTab({ label }) {
 
 export default function ConopeptideDetailPage() {
   const { id } = useParams()
+  const [activeTab, setActiveTab] = useState('Overview')
+  const [copiedSection, setCopiedSection] = useState('')
+
   const record = useMemo(() => {
     return (
       conopeptideDetailRecords.find((item) => item.accession === id) ??
@@ -42,7 +48,17 @@ export default function ConopeptideDetailPage() {
     )
   }, [id])
 
-  const [activeTab, setActiveTab] = useState('Overview')
+  const copyToClipboard = async (section, text) => {
+    try {
+      await navigator.clipboard.writeText(text)
+      setCopiedSection(section)
+      window.setTimeout(() => {
+        setCopiedSection((current) => (current === section ? '' : current))
+      }, 1500)
+    } catch {
+      setCopiedSection('')
+    }
+  }
 
   if (!record) {
     return null
@@ -112,7 +128,29 @@ export default function ConopeptideDetailPage() {
       {activeTab === 'Overview' ? (
         <div className="space-y-6">
           <section className="grid gap-4 lg:grid-cols-[minmax(0,1.65fr)_minmax(280px,0.75fr)]">
-            <DetailPanel title="Predicted Peptide">
+            <DetailPanel
+              title="Predicted Peptide"
+              action={
+                <Button
+                  type="button"
+                  variant="outline"
+                  className="gap-2 px-3 py-2 text-sm"
+                  onClick={() => copyToClipboard('predicted-peptide', record.predictedPeptide)}
+                >
+                  {copiedSection === 'predicted-peptide' ? (
+                    <>
+                      Copied
+                      <Check className="h-4 w-4" />
+                    </>
+                  ) : (
+                    <>
+                      Copy
+                      <Copy className="h-4 w-4" />
+                    </>
+                  )}
+                </Button>
+              }
+            >
               <div className="space-y-4">
                 <div className="flex flex-wrap items-center gap-3 text-[1.95rem] tracking-[0.38em] text-[var(--app-text)] sm:text-[2.2rem]">
                   {record.predictedPeptide.split('').map((letter, index) => (
@@ -171,7 +209,31 @@ export default function ConopeptideDetailPage() {
           </DetailPanel>
 
           <section className="grid gap-4">
-            <DetailPanel title="Precursor Sequence">
+            <DetailPanel
+              title="Precursor Sequence"
+              action={
+                <Button
+                  type="button"
+                  variant="outline"
+                  className="gap-2 px-3 py-2 text-sm"
+                  onClick={() =>
+                    copyToClipboard('precursor-sequence', record.precursorSequence.join('\n'))
+                  }
+                >
+                  {copiedSection === 'precursor-sequence' ? (
+                    <>
+                      Copied
+                      <Check className="h-4 w-4" />
+                    </>
+                  ) : (
+                    <>
+                      Copy
+                      <Copy className="h-4 w-4" />
+                    </>
+                  )}
+                </Button>
+              }
+            >
               <div className="grid gap-5 lg:grid-cols-[minmax(0,1fr)_220px] lg:items-stretch">
                 <div className="rounded-2xl border border-[var(--app-border)] bg-white p-4">
                   <div className="flex gap-4 text-[0.82rem] text-[var(--app-muted)]">
@@ -203,7 +265,34 @@ export default function ConopeptideDetailPage() {
             </DetailPanel>
           </section>
 
-          <DetailPanel title="Translated Precursor (with predicted mature peptide highlighted)">
+          <DetailPanel
+            title="Translated Precursor (with predicted mature peptide highlighted)"
+            action={
+              <Button
+                type="button"
+                variant="outline"
+                className="gap-2 px-3 py-2 text-sm"
+                onClick={() =>
+                  copyToClipboard(
+                    'translated-precursor',
+                    record.translatedPrecursorSegments.map((segment) => segment.text).join(''),
+                  )
+                }
+              >
+                {copiedSection === 'translated-precursor' ? (
+                  <>
+                    Copied
+                    <Check className="h-4 w-4" />
+                  </>
+                ) : (
+                  <>
+                    Copy
+                    <Copy className="h-4 w-4" />
+                  </>
+                )}
+              </Button>
+            }
+          >
             <div className="rounded-2xl border border-[var(--app-border)] bg-brand-50/20 p-4">
               <div className="flex flex-wrap items-center gap-2 font-mono text-[1rem] tracking-[0.38em] text-[var(--app-text)]">
                 {record.translatedPrecursorSegments.map((segment, index) => (
