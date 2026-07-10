@@ -149,33 +149,41 @@ export const conopeptideDetailRecords = [
     accession: 'ConoPH0001',
     title: 'ConoPH0001',
     subtitle: 'Conopeptide Precursor',
-    summaryStats: [
-      { value: '67', label: 'Superfamilies' },
-      { value: '67', label: 'Superfamilies' },
-      { value: '67', label: 'Superfamilies' },
-      { value: '67', label: 'Superfamilies' },
-      { value: '67', label: 'Superfamilies' },
-      { value: '67', label: 'Superfamilies' },
+    status: 'Published',
+    topSummaryItems: [
+      { label: 'Gene Superfamily', value: 'M Superfamily' },
+      { label: 'Cysteine Framework', value: 'MII' },
+      { label: 'Predicted Peptide', value: 'GCCSHPACGKGRR...' },
+      { label: 'Matched Toxin', value: 'µ-Conotoxin KIIIA' },
+      { label: 'Species', value: 'Conus textile' },
+      { label: 'Province', value: 'Cebu' },
     ],
     predictedPeptide: 'GCCSHPACGKGRRC',
     predictedPeptideMarkers: ['1', '5', '10', '15'],
+    predictedPeptideLegend: 'Cysteine',
     about:
       'Predicted mature conopeptide cleaved from the precursor sequence and curated from transcriptomic evidence.',
     matchedToxin: {
       name: 'Conotoxin KIIIA',
+      tag: 'Neurotoxin',
       summary:
         'Potent inhibitor of voltage-gated sodium channels (Nav). Associated with analgesic effects.',
-      reference:
-        'Lewis, R.J., Garcia, M.L. (2003) Toxicon, 42(2), 135–149',
+      reference: 'Lewis, R.J., Garcia, M.L. (2003) Toxicon, 42(2), 135-149',
       referenceAction: 'View in Reference',
     },
-    precursorSequence: '',
+    precursorSequence: [
+      'ATG GCT TGT TGT TCT CAT CCG GCT TGT GGT AAG GGC GCC GCC TGC TGT GAA GAC',
+      'GCT TGT GAA GGA AAG GAG CGC TGT TAA',
+    ],
     precursorMetadata: {
       length: '60 nucleotides (nt)',
       translation: '20 amino acids (aa)',
     },
-    translatedPrecursor:
-      'MKTILLLLALALVQGQGCCSHPACGKGRRCLPKTALVQAGGCCSHPACGKGRR',
+    translatedPrecursorSegments: [
+      { text: 'M A C C ', highlighted: false },
+      { text: 'S H P A C G K G R R C E D A E G K E R C', highlighted: true },
+      { text: ' *', highlighted: false },
+    ],
     additionalInformation: [
       { label: 'Accession', value: 'ConoPH0001' },
       { label: 'Transcript ID', value: 'TRINITY_DN100_c0_g1_i1' },
@@ -185,7 +193,7 @@ export const conopeptideDetailRecords = [
       { label: 'Collection Date', value: '2022-07-15' },
       { label: 'Sequencing Platform', value: 'Illumina NovaSeq 6000' },
     ],
-    tabs: ['Overview', 'Conopeptides', 'Specimens', 'Publications', 'Sequences'],
+    tabs: ['Overview', 'Sequences', 'Annotations', 'Source'],
   },
 ]
 

@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react'
-import { ArrowUpRight } from 'lucide-react'
+import { ArrowUpRight, Download } from 'lucide-react'
 import { useParams } from 'react-router-dom'
 
 import Breadcrumbs from '@/components/ui/Breadcrumbs'
@@ -11,20 +11,7 @@ import {
   defaultConopeptideDetailId,
 } from '@/features/conopeptides/data/conopeptideMockData'
 
-const tabs = ['Overview', 'Conopeptides', 'Specimens', 'Publications', 'Sequences']
-
-function SummaryStatCard({ value, label }) {
-  return (
-    <Card className="flex min-h-[152px] items-center justify-center rounded-3xl p-5 text-center">
-      <div>
-        <div className="text-[2rem] font-semibold leading-none text-[var(--app-text)]">{value}</div>
-        <div className="mt-2 text-[1.05rem] font-semibold leading-6 text-brand-700">{label}</div>
-      </div>
-    </Card>
-  )
-}
-
-function SectionCard({ title, children, className }) {
+function DetailPanel({ title, children, className }) {
   return (
     <Card className={cn('!p-0 overflow-hidden', className)}>
       <div className="px-5 py-4 text-[1.05rem] font-semibold text-brand-700">{title}</div>
@@ -33,12 +20,17 @@ function SectionCard({ title, children, className }) {
   )
 }
 
-function PlaceholderTab({ label }) {
+function SummaryItem({ label, value }) {
   return (
-    <Card className="border-dashed bg-white/80 text-center text-[var(--app-muted)]">
-      {label} content coming soon.
-    </Card>
+    <div className="min-w-0 border-r border-[var(--app-border)] px-5 py-2 last:border-r-0">
+      <div className="text-[0.82rem] text-[var(--app-muted)]">{label}</div>
+      <div className="mt-2 text-[1rem] font-medium text-[var(--app-text)]">{value}</div>
+    </div>
   )
+}
+
+function PlaceholderTab({ label }) {
+  return <Card className="border-dashed bg-white/80 text-[var(--app-muted)]">{label} content coming soon.</Card>
 }
 
 export default function ConopeptideDetailPage() {
@@ -57,7 +49,7 @@ export default function ConopeptideDetailPage() {
   }
 
   return (
-    <div className="space-y-8 pb-8">
+    <div className="space-y-6 pb-8">
       <Breadcrumbs
         items={[
           { label: 'Home', to: '/' },
@@ -66,22 +58,36 @@ export default function ConopeptideDetailPage() {
         ]}
       />
 
-      <section className="space-y-2">
-        <h1 className="font-serif text-[clamp(3rem,5vw,5rem)] leading-[0.95] text-black">
-          {record.title}
-        </h1>
-        <p className="text-[1.05rem] text-[var(--app-muted)]">{record.subtitle}</p>
+      <section className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+        <div className="space-y-2">
+          <div className="flex flex-wrap items-center gap-3">
+            <h1 className="font-serif text-[clamp(2.6rem,4.6vw,4.75rem)] leading-[0.95] text-black">
+              {record.title}
+            </h1>
+            <span className="rounded-full border border-brand-200 bg-brand-50 px-3 py-1 text-sm font-medium text-brand-700">
+              {record.status}
+            </span>
+          </div>
+          <p className="text-[1.05rem] text-[var(--app-muted)]">{record.subtitle}</p>
+        </div>
+
+        <Button type="button" variant="outline" className="gap-2 self-start px-4">
+          Export
+          <Download className="h-4 w-4" />
+        </Button>
       </section>
 
-      <section className="grid gap-4 sm:grid-cols-2 xl:grid-cols-6">
-        {record.summaryStats.map((stat, index) => (
-          <SummaryStatCard key={`${stat.label}-${index}`} value={stat.value} label={stat.label} />
-        ))}
-      </section>
+      <Card className="!p-0 overflow-hidden">
+        <div className="grid gap-0 md:grid-cols-2 xl:grid-cols-6">
+          {record.topSummaryItems.map((item) => (
+            <SummaryItem key={item.label} label={item.label} value={item.value} />
+          ))}
+        </div>
+      </Card>
 
       <section className="border-b border-[var(--app-border)]">
-        <div className="flex flex-wrap gap-4 sm:gap-10">
-          {tabs.map((tab) => {
+        <div className="flex flex-wrap gap-6 sm:gap-10">
+          {record.tabs.map((tab) => {
             const isActive = tab === activeTab
 
             return (
@@ -90,8 +96,10 @@ export default function ConopeptideDetailPage() {
                 type="button"
                 onClick={() => setActiveTab(tab)}
                 className={cn(
-                  'pb-4 text-[1.05rem] font-medium transition',
-                  isActive ? 'text-brand-700' : 'text-[var(--app-muted)] hover:text-brand-700',
+                  'border-b-2 border-transparent pb-4 text-[1rem] font-medium transition',
+                  isActive
+                    ? 'border-brand-500 text-brand-700'
+                    : 'text-[var(--app-muted)] hover:text-brand-700',
                 )}
               >
                 {tab}
@@ -102,118 +110,131 @@ export default function ConopeptideDetailPage() {
       </section>
 
       {activeTab === 'Overview' ? (
-        <div className="space-y-8">
-          <section className="grid gap-6 lg:grid-cols-[minmax(0,1.25fr)_minmax(320px,0.75fr)]">
-            <SectionCard title="Predicted Peptide">
+        <div className="space-y-6">
+          <section className="grid gap-4 lg:grid-cols-[minmax(0,1.65fr)_minmax(280px,0.75fr)]">
+            <DetailPanel title="Predicted Peptide">
               <div className="space-y-4">
-                <div className="flex flex-wrap items-center gap-3 text-[2rem] tracking-[0.42em] text-[var(--app-text)] sm:text-[2.25rem]">
+                <div className="flex flex-wrap items-center gap-3 text-[1.95rem] tracking-[0.38em] text-[var(--app-text)] sm:text-[2.2rem]">
                   {record.predictedPeptide.split('').map((letter, index) => (
                     <span key={`${letter}-${index}`} className="inline-flex flex-col items-center">
                       <span className="font-mono">{letter}</span>
-                      {record.predictedPeptideMarkers.includes(String(index + 1)) ? (
-                        <span className="mt-2 text-sm tracking-normal text-brand-700">
-                          {String(index + 1)}
-                        </span>
-                      ) : (
-                        <span className="mt-2 text-sm tracking-normal text-transparent">.</span>
-                      )}
+                      <span className="mt-2 text-sm tracking-normal text-brand-700">
+                        {record.predictedPeptideMarkers.includes(String(index + 1))
+                          ? String(index + 1)
+                          : '\u00A0'}
+                      </span>
                     </span>
                   ))}
                 </div>
+                <div className="flex items-center gap-2 text-sm text-[var(--app-muted)]">
+                  <span className="h-3 w-3 rounded-full bg-brand-400" />
+                  {record.predictedPeptideLegend}
+                </div>
               </div>
-            </SectionCard>
+            </DetailPanel>
 
-            <SectionCard title="About">
-              <p className="text-[1.05rem] leading-8 text-brand-700">{record.about}</p>
-            </SectionCard>
+            <DetailPanel title="About">
+              <p className="text-[1.02rem] leading-7 text-brand-700">{record.about}</p>
+            </DetailPanel>
           </section>
 
-          <section className="grid gap-6 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)]">
-            <Card className="!p-0 overflow-hidden">
-              <div className="px-5 py-4 text-[1.05rem] font-semibold text-brand-700">Matched Toxin</div>
-              <div className="border-t border-[var(--app-border)] px-5 py-5">
-                <div className="space-y-4">
-                  <h3 className="text-[1.6rem] font-semibold text-[var(--app-text)]">
+          <DetailPanel title="Matched Toxin">
+            <div className="grid gap-5 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)] lg:items-center">
+              <div className="space-y-4">
+                <div className="flex flex-wrap items-center gap-3">
+                  <h3 className="text-[1.55rem] font-semibold text-[var(--app-text)]">
                     {record.matchedToxin.name}
                   </h3>
-                  <p className="max-w-3xl text-[1.02rem] leading-7 text-[var(--app-muted)]">
-                    {record.matchedToxin.summary}
+                  <span className="rounded-full border border-brand-200 bg-brand-50 px-3 py-1 text-sm font-medium text-brand-700">
+                    {record.matchedToxin.tag}
+                  </span>
+                </div>
+                <p className="max-w-2xl text-[1rem] leading-7 text-[var(--app-muted)]">
+                  {record.matchedToxin.summary}
+                </p>
+              </div>
+
+              <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-end">
+                <div className="rounded-2xl border border-[var(--app-border)] bg-white p-4">
+                  <p className="text-sm text-[var(--app-muted)]">Reference</p>
+                  <p className="mt-2 text-[0.98rem] leading-7 text-[var(--app-text)]">
+                    {record.matchedToxin.reference}
                   </p>
+                </div>
 
-                  <div className="grid gap-5 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-end">
-                    <div className="space-y-2 rounded-2xl border border-[var(--app-border)] bg-brand-50/50 p-4">
-                      <p className="text-sm font-semibold text-brand-700">Reference</p>
-                      <p className="text-[1rem] leading-7 text-[var(--app-text)]">
-                        {record.matchedToxin.reference}
-                      </p>
+                <Button type="button" variant="outline" className="gap-2 px-4">
+                  {record.matchedToxin.referenceAction}
+                  <ArrowUpRight className="h-4 w-4" />
+                </Button>
+              </div>
+            </div>
+          </DetailPanel>
+
+          <section className="grid gap-4">
+            <DetailPanel title="Precursor Sequence">
+              <div className="grid gap-5 lg:grid-cols-[minmax(0,1fr)_220px] lg:items-stretch">
+                <div className="rounded-2xl border border-[var(--app-border)] bg-white p-4">
+                  <div className="flex gap-4 text-[0.82rem] text-[var(--app-muted)]">
+                    <span>1</span>
+                    <div className="flex-1 font-mono text-[0.95rem] leading-8 tracking-[0.08em] text-[var(--app-text)]">
+                      {record.precursorSequence.map((line) => (
+                        <div key={line}>{line}</div>
+                      ))}
                     </div>
+                    <span className="self-end">60</span>
+                  </div>
+                </div>
 
-                    <Button type="button" className="gap-2 px-5">
-                      {record.matchedToxin.referenceAction}
-                      <ArrowUpRight className="h-4 w-4" />
-                    </Button>
+                <div className="space-y-4 rounded-2xl border border-[var(--app-border)] bg-white p-5">
+                  <div>
+                    <p className="text-[1rem] text-[var(--app-muted)]">Length</p>
+                    <p className="mt-2 text-[1.1rem] font-semibold text-brand-700">
+                      {record.precursorMetadata.length}
+                    </p>
+                  </div>
+                  <div>
+                    <p className="text-[1rem] text-[var(--app-muted)]">Translation</p>
+                    <p className="mt-2 text-[1.1rem] font-semibold text-brand-700">
+                      {record.precursorMetadata.translation}
+                    </p>
                   </div>
                 </div>
               </div>
-            </Card>
-
-            <Card className="!p-0 overflow-hidden">
-              <div className="px-5 py-4 text-[1.05rem] font-semibold text-brand-700">Precursor Sequence</div>
-              <div className="border-t border-[var(--app-border)] px-5 py-5">
-                <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_220px] lg:items-stretch">
-                  <div className="min-h-[168px] rounded-2xl border border-dashed border-brand-200 bg-brand-50/30 p-5">
-                    <div className="h-full min-h-[120px]" />
-                  </div>
-                  <div className="space-y-5 rounded-2xl border border-[var(--app-border)] bg-white p-5">
-                    <div>
-                      <p className="text-lg font-medium text-[var(--app-muted)]">Length</p>
-                      <p className="mt-2 text-[1.35rem] font-semibold text-brand-700">
-                        {record.precursorMetadata.length}
-                      </p>
-                    </div>
-                    <div>
-                      <p className="text-lg font-medium text-[var(--app-muted)]">Translation</p>
-                      <p className="mt-2 text-[1.35rem] font-semibold text-brand-700">
-                        {record.precursorMetadata.translation}
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </Card>
+            </DetailPanel>
           </section>
 
-          <Card className="!p-0 overflow-hidden">
-            <div className="px-5 py-4 text-[1.05rem] font-semibold text-brand-700">
-              Translated Precursor <span className="font-normal">(with predicted mature peptide highlighted)</span>
-            </div>
-            <div className="border-t border-[var(--app-border)] px-5 py-5">
-              <div className="min-h-[180px] rounded-2xl border border-dashed border-brand-200 bg-brand-50/30 p-5">
-                <div className="text-[1rem] leading-8 text-[var(--app-text)]">
-                  {record.translatedPrecursor}
-                </div>
+          <DetailPanel title="Translated Precursor (with predicted mature peptide highlighted)">
+            <div className="rounded-2xl border border-[var(--app-border)] bg-brand-50/20 p-4">
+              <div className="flex flex-wrap items-center gap-2 font-mono text-[1rem] tracking-[0.38em] text-[var(--app-text)]">
+                {record.translatedPrecursorSegments.map((segment, index) => (
+                  <span
+                    key={`${segment.text}-${index}`}
+                    className={cn(
+                      'rounded-md px-1 py-1',
+                      segment.highlighted && 'bg-brand-100 text-brand-700',
+                    )}
+                  >
+                    {segment.text}
+                  </span>
+                ))}
+              </div>
+              <div className="mt-4 flex items-center gap-2 text-sm text-[var(--app-muted)]">
+                <span className="h-3 w-3 rounded-sm bg-brand-300" />
+                Mature peptide
               </div>
             </div>
-          </Card>
+          </DetailPanel>
 
-          <Card className="!p-0 overflow-hidden">
-            <div className="px-5 py-4 text-[1.05rem] font-semibold text-brand-700">
-              Additional Information
+          <DetailPanel title="Additional Information">
+            <div className="grid gap-6 lg:grid-cols-2">
+              {record.additionalInformation.map((item) => (
+                <div key={item.label} className="grid gap-2 sm:grid-cols-[180px_minmax(0,1fr)]">
+                  <dt className="font-semibold text-brand-700">{item.label}</dt>
+                  <dd className="text-[var(--app-text)]">{item.value}</dd>
+                </div>
+              ))}
             </div>
-            <div className="border-t border-[var(--app-border)] px-5 py-5">
-              <dl className="grid gap-6 lg:grid-cols-2">
-                {record.additionalInformation.map((item) => (
-                  <div
-                    key={item.label}
-                    className="grid gap-2 sm:grid-cols-[220px_minmax(0,1fr)] sm:items-start"
-                  >
-                    <dt className="font-semibold text-brand-700">{item.label}</dt>
-                    <dd className="text-[var(--app-text)]">{item.value}</dd>
-                  </div>
-                ))}
-              </dl>
-            </div>
-          </Card>
+          </DetailPanel>
         </div>
       ) : (
         <PlaceholderTab label={activeTab} />
