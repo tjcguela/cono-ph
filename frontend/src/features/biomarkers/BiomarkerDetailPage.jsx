@@ -76,6 +76,19 @@ function SequenceBlock({ sequence, note }) {
   )
 }
 
+function MetadataGrid({ items }) {
+  return (
+    <dl className="grid gap-5 sm:grid-cols-2">
+      {items.map((item) => (
+        <div key={item.label} className="grid gap-2">
+          <dt className="text-sm text-[var(--app-muted)]">{item.label}</dt>
+          <dd className="font-medium leading-7 text-[var(--app-text)]">{item.value}</dd>
+        </div>
+      ))}
+    </dl>
+  )
+}
+
 export default function BiomarkerDetailPage() {
   const { id } = useParams()
   const [activeTab, setActiveTab] = useState('Overview')
@@ -212,12 +225,19 @@ export default function BiomarkerDetailPage() {
             </DetailPanel>
 
             <div className="space-y-4 rounded-3xl border border-[var(--app-border)] bg-white p-5">
-              <div>
-                <p className="text-[1rem] text-[var(--app-muted)]">Sequence Length</p>
-                <p className="mt-2 text-[1.1rem] font-semibold text-brand-700">
-                  {record.sequenceTab.length}
-                </p>
-              </div>
+              {record.sequenceTab.summaryItems?.map((item) => (
+                <div key={item.label}>
+                  <p className="text-[1rem] text-[var(--app-muted)]">{item.label}</p>
+                  <p className="mt-2 text-[1.1rem] font-semibold text-brand-700">{item.value}</p>
+                </div>
+              )) || (
+                <div>
+                  <p className="text-[1rem] text-[var(--app-muted)]">Sequence Length</p>
+                  <p className="mt-2 text-[1.1rem] font-semibold text-brand-700">
+                    {record.sequenceTab.length}
+                  </p>
+                </div>
+              )}
             </div>
           </section>
 
@@ -252,19 +272,30 @@ export default function BiomarkerDetailPage() {
               </div>
             </div>
           </DetailPanel>
+
+          {record.annotationsTab.reference ? (
+            <DetailPanel title="Annotation Reference">
+              <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-end">
+                <div className="rounded-2xl border border-[var(--app-border)] bg-white p-4">
+                  <p className="text-sm text-[var(--app-muted)]">{record.annotationsTab.reference.label}</p>
+                  <p className="mt-2 text-[0.98rem] leading-7 text-[var(--app-text)]">
+                    {record.annotationsTab.reference.value}
+                  </p>
+                </div>
+
+                <Button type="button" variant="outline" className="gap-2 px-4">
+                  {record.annotationsTab.reference.actionLabel}
+                  <ArrowUpRight className="h-4 w-4" />
+                </Button>
+              </div>
+            </DetailPanel>
+          ) : null}
         </div>
       ) : (
         <div className="space-y-6">
           <DetailPanel title="Record Metadata">
             <div className="grid gap-6 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)] lg:items-start">
-              <dl className="grid gap-5 sm:grid-cols-2">
-                {record.metadataTab.rows.map((item) => (
-                  <div key={item.label} className="grid gap-2">
-                    <dt className="text-sm text-[var(--app-muted)]">{item.label}</dt>
-                    <dd className="font-medium text-[var(--app-text)]">{item.value}</dd>
-                  </div>
-                ))}
-              </dl>
+              <MetadataGrid items={record.metadataTab.rows} />
 
               <div className="space-y-4 rounded-2xl border border-[var(--app-border)] bg-white p-5">
                 <div>
