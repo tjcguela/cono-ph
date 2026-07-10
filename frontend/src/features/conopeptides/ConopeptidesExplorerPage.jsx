@@ -1,4 +1,5 @@
-import { Download } from 'lucide-react'
+import { ChevronRight, Download } from 'lucide-react'
+import { useNavigate } from 'react-router-dom'
 
 import ConopeptideLayout from '@/features/conopeptides/components/ConopeptideLayout'
 import ConopeptideMetricCard from '@/features/conopeptides/components/ConopeptideMetricCard'
@@ -15,6 +16,8 @@ import {
 } from '@/features/conopeptides/data/conopeptideMockData'
 
 export default function ConopeptidesExplorerPage() {
+  const navigate = useNavigate()
+
   return (
     <ConopeptideLayout
       breadcrumbs={conopeptideExplorerBreadcrumbs}
@@ -76,8 +79,12 @@ export default function ConopeptidesExplorerPage() {
                   'Matched Toxin',
                   'Species',
                   'Province',
+                  '',
                 ].map((column) => (
-                  <th key={column} className="border-b border-[var(--app-border)] px-4 py-3 font-semibold">
+                  <th
+                    key={column || 'action'}
+                    className="border-b border-[var(--app-border)] px-4 py-3 font-semibold"
+                  >
                     {column}
                   </th>
                 ))}
@@ -85,7 +92,19 @@ export default function ConopeptidesExplorerPage() {
             </thead>
             <tbody className="text-sm text-[var(--app-text)]">
               {conopeptideExplorerRows.map((row) => (
-                <tr key={row.accession} className="transition hover:bg-brand-50/50">
+                <tr
+                  key={row.accession}
+                  role="button"
+                  tabIndex={0}
+                  onClick={() => navigate(`/conopeptides/${row.accession}`)}
+                  onKeyDown={(event) => {
+                    if (event.key === 'Enter' || event.key === ' ') {
+                      event.preventDefault()
+                      navigate(`/conopeptides/${row.accession}`)
+                    }
+                  }}
+                  className="cursor-pointer transition hover:bg-brand-50/50 focus:outline-none focus-visible:bg-brand-50/50"
+                >
                   <td className="border-b border-[var(--app-border)] px-4 py-4 font-semibold text-brand-700">
                     {row.accession}
                   </td>
@@ -95,6 +114,9 @@ export default function ConopeptidesExplorerPage() {
                   <td className="border-b border-[var(--app-border)] px-4 py-4">{row.matchedToxin}</td>
                   <td className="border-b border-[var(--app-border)] px-4 py-4">{row.species}</td>
                   <td className="border-b border-[var(--app-border)] px-4 py-4">{row.province}</td>
+                  <td className="border-b border-[var(--app-border)] px-4 py-4 text-right">
+                    <ChevronRight className="ml-auto h-5 w-5 text-[var(--app-muted)]" />
+                  </td>
                 </tr>
               ))}
             </tbody>

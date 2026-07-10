@@ -143,3 +143,50 @@ export const conopeptidePagination = {
   page: 1,
   totalPages: 68,
 }
+
+export const conopeptideDetailRecords = [
+  {
+    accession: 'ConoPH0001',
+    title: 'ConoPH0001',
+    subtitle: 'Conopeptide Precursor',
+    summaryStats: [
+      { value: '67', label: 'Superfamilies' },
+      { value: '67', label: 'Superfamilies' },
+      { value: '67', label: 'Superfamilies' },
+      { value: '67', label: 'Superfamilies' },
+      { value: '67', label: 'Superfamilies' },
+      { value: '67', label: 'Superfamilies' },
+    ],
+    predictedPeptide: 'GCCSHPACGKGRRC',
+    predictedPeptideMarkers: ['1', '5', '10', '15'],
+    about:
+      'Predicted mature conopeptide cleaved from the precursor sequence and curated from transcriptomic evidence.',
+    matchedToxin: {
+      name: 'Conotoxin KIIIA',
+      summary:
+        'Potent inhibitor of voltage-gated sodium channels (Nav). Associated with analgesic effects.',
+      reference:
+        'Lewis, R.J., Garcia, M.L. (2003) Toxicon, 42(2), 135–149',
+      referenceAction: 'View in Reference',
+    },
+    precursorSequence: '',
+    precursorMetadata: {
+      length: '60 nucleotides (nt)',
+      translation: '20 amino acids (aa)',
+    },
+    translatedPrecursor:
+      'MKTILLLLALALVQGQGCCSHPACGKGRRCLPKTALVQAGGCCSHPACGKGRR',
+    additionalInformation: [
+      { label: 'Accession', value: 'ConoPH0001' },
+      { label: 'Transcript ID', value: 'TRINITY_DN100_c0_g1_i1' },
+      { label: 'Data Status', value: 'Published' },
+      { label: 'Project', value: 'Project 1 - Anti-Pain and Anti-Neurodegeneration Drug Candidates' },
+      { label: 'Specimen ID', value: 'UPD-MSI-CTEX-001' },
+      { label: 'Collection Date', value: '2022-07-15' },
+      { label: 'Sequencing Platform', value: 'Illumina NovaSeq 6000' },
+    ],
+    tabs: ['Overview', 'Conopeptides', 'Specimens', 'Publications', 'Sequences'],
+  },
+]
+
+export const defaultConopeptideDetailId = conopeptideDetailRecords[0].accession

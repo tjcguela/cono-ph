@@ -5,6 +5,7 @@ import AboutPage from '@/pages/AboutPage'
 import BiomarkersPage from '@/pages/BiomarkersPage'
 import RoutePlaceholder from '@/components/common/RoutePlaceholder'
 import ConopeptidesPage from '@/pages/ConopeptidesPage'
+import ConopeptideDetailPage from '@/pages/ConopeptideDetailPage'
 import HomePage from '@/pages/HomePage'
 import PublicationsPage from '@/pages/PublicationsPage'
 import SpeciesDetailPage from '@/pages/SpeciesDetailPage'
@@ -23,6 +24,7 @@ export const router = createBrowserRouter([
       { path: '/species', element: <SpeciesPage /> },
       { path: '/species/:speciesId', element: <SpeciesDetailPage /> },
       { path: '/conopeptides', element: <ConopeptidesPage /> },
+      { path: '/conopeptides/:id', element: <ConopeptideDetailPage /> },
       { path: '/biomarkers', element: <BiomarkersPage /> },
       { path: '/visualization', element: <VisualizationPage /> },
       { path: '/visualization/species', element: <SpeciesOverviewPage /> },
