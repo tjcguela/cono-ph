@@ -9,6 +9,7 @@ export default function ConopeptideTableCard({
   subtitle,
   actionLabel = 'View full list',
   actionTo,
+  action,
   children,
   className,
 }) {
@@ -19,15 +20,17 @@ export default function ConopeptideTableCard({
           <h2 className="text-2xl leading-none text-[var(--app-text)]">{title}</h2>
           {subtitle ? <p className="text-sm leading-6 text-[var(--app-muted)]">{subtitle}</p> : null}
         </div>
-        {actionTo ? (
-          <Link
-            to={actionTo}
-            className="inline-flex items-center gap-1 text-sm font-medium text-[var(--app-muted)] transition hover:text-brand-700"
-          >
-            <span>{actionLabel}</span>
-            <ArrowRight className="h-4 w-4" />
-          </Link>
-        ) : null}
+        {action
+          ? action
+          : actionTo ? (
+              <Link
+                to={actionTo}
+                className="inline-flex items-center gap-1 text-sm font-medium text-[var(--app-muted)] transition hover:text-brand-700"
+              >
+                <span>{actionLabel}</span>
+                <ArrowRight className="h-4 w-4" />
+              </Link>
+            ) : null}
       </div>
 
       <div className="p-5 sm:p-6">{children}</div>
