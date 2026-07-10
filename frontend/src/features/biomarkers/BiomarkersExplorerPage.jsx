@@ -1,0 +1,109 @@
+import { Download } from 'lucide-react'
+
+import BiomarkerLayout from '@/features/biomarkers/components/BiomarkerLayout'
+import BiomarkerMetricCard from '@/features/biomarkers/components/BiomarkerMetricCard'
+import BiomarkerPagination from '@/features/biomarkers/components/BiomarkerPagination'
+import BiomarkerSidebar from '@/features/biomarkers/components/BiomarkerSidebar'
+import BiomarkerTableCard from '@/features/biomarkers/components/BiomarkerTableCard'
+import {
+  biomarkerExplorerBreadcrumbs,
+  biomarkerExplorerMeta,
+  biomarkerExplorerMetrics,
+  biomarkerExplorerRows,
+  biomarkerFilterOptions,
+  biomarkerPagination,
+} from '@/features/biomarkers/data/biomarkerMockData'
+
+export default function BiomarkersExplorerPage() {
+  return (
+    <BiomarkerLayout
+      breadcrumbs={biomarkerExplorerBreadcrumbs}
+      title={biomarkerExplorerMeta.title}
+      subtitle={biomarkerExplorerMeta.subtitle}
+      sidebar={
+        <BiomarkerSidebar
+          filters={{
+            search: '',
+            project: 'All Projects',
+            markerType: 'All Marker Types',
+            species: 'All Species',
+            province: 'All Provinces',
+            municipality: 'All Municipalities',
+            sequencingPlatform: 'All Platforms',
+            status: [],
+            hasAccession: false,
+            hasSequenceData: false,
+          }}
+          options={biomarkerFilterOptions}
+          onFilterChange={() => {}}
+        />
+      }
+    >
+      <section className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+        {biomarkerExplorerMetrics.map((metric) => (
+          <BiomarkerMetricCard
+            key={metric.label}
+            icon={metric.icon}
+            value={metric.value}
+            label={metric.label}
+            description={metric.description}
+          />
+        ))}
+      </section>
+
+      <BiomarkerTableCard
+        title="Biomarker Records"
+        resultCount="312 results"
+        action={
+          <button
+            type="button"
+            className="inline-flex items-center gap-2 rounded-2xl border border-[var(--app-border)] bg-white px-4 py-2 text-sm font-medium text-[var(--app-text)] transition hover:border-brand-300 hover:text-brand-700"
+          >
+            <Download className="h-4 w-4" />
+            Export
+          </button>
+        }
+      >
+        <div className="overflow-x-auto">
+          <table className="min-w-full border-separate border-spacing-0">
+            <thead>
+              <tr className="text-left text-xs uppercase tracking-wide text-[var(--app-muted)]">
+                {[
+                  'Biomarker ID',
+                  'Marker Type',
+                  'Species',
+                  'Accession Number',
+                  'Sequence Length',
+                  'Province',
+                  'Status',
+                ].map((column) => (
+                  <th key={column} className="border-b border-[var(--app-border)] px-4 py-3 font-semibold">
+                    {column}
+                  </th>
+                ))}
+              </tr>
+            </thead>
+
+            <tbody className="text-sm text-[var(--app-text)]">
+              {biomarkerExplorerRows.map((row) => (
+                <tr key={row.biomarkerId} className="transition hover:bg-brand-50/40">
+                  <td className="border-b border-[var(--app-border)] px-4 py-4 font-semibold text-brand-700">
+                    {row.biomarkerId}
+                  </td>
+                  <td className="border-b border-[var(--app-border)] px-4 py-4">{row.markerType}</td>
+                  <td className="border-b border-[var(--app-border)] px-4 py-4">{row.species}</td>
+                  <td className="border-b border-[var(--app-border)] px-4 py-4">{row.accession}</td>
+                  <td className="border-b border-[var(--app-border)] px-4 py-4">{row.sequenceLength}</td>
+                  <td className="border-b border-[var(--app-border)] px-4 py-4">{row.province}</td>
+                  <td className="border-b border-[var(--app-border)] px-4 py-4">{row.status}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+
+        <BiomarkerPagination pagination={biomarkerPagination} onPageChange={() => {}} loading={false} />
+      </BiomarkerTableCard>
+    </BiomarkerLayout>
+  )
+}
