@@ -23,4 +23,5 @@ A proof-of-concept database that integrates `species taxonomy`, `collection meta
     - run `docker build -t <SOME_NAME>:<OPTIONAL_TAG> .`
         - e.g `docker buid -t my_backend:v0 .`. NOTE: if tag is left undeclared, default value is `latest`.
     - run `docker run -p <PORT_INT>:<PORT_INT> <NAME_CHOSEN>:<OPTIONAL_TAG>`
-        - e.g. `docker run -p 9999:9999 my_backend:latest`
+        - e.g. `docker run -p 9999:9999 my_backend:latest`  
+4. Important to keep in mind that whatever port number is `EXPOSED` in the `Dockerfile`, it must also be used in the `port-forwarding` (the -p 9999:9999 thingy)
