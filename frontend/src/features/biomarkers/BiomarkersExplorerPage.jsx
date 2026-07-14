@@ -2,7 +2,6 @@ import { ChevronRight, Download } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 
 import BiomarkerLayout from '@/features/biomarkers/components/BiomarkerLayout'
-import BiomarkerMetricCard from '@/features/biomarkers/components/BiomarkerMetricCard'
 import BiomarkerPagination from '@/features/biomarkers/components/BiomarkerPagination'
 import BiomarkerSidebar from '@/features/biomarkers/components/BiomarkerSidebar'
 import BiomarkerTableCard from '@/features/biomarkers/components/BiomarkerTableCard'
@@ -10,7 +9,6 @@ import {
   biomarkerExplorerBreadcrumbs,
   biomarkerExplorerInitialFilters,
   biomarkerExplorerMeta,
-  biomarkerExplorerMetrics,
   biomarkerExplorerResultCount,
   biomarkerExplorerRows,
   biomarkerFilterOptions,
@@ -33,18 +31,6 @@ export default function BiomarkersExplorerPage() {
         />
       }
     >
-      <section className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-        {biomarkerExplorerMetrics.map((metric) => (
-          <BiomarkerMetricCard
-            key={metric.label}
-            icon={metric.icon}
-            value={metric.value}
-            label={metric.label}
-            description={metric.description}
-          />
-        ))}
-      </section>
-
       <BiomarkerTableCard
         title="Biomarker Records"
         resultCount={biomarkerExplorerResultCount}

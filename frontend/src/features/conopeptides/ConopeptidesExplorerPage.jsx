@@ -2,14 +2,12 @@ import { ChevronRight, Download } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 
 import ConopeptideLayout from '@/features/conopeptides/components/ConopeptideLayout'
-import ConopeptideMetricCard from '@/features/conopeptides/components/ConopeptideMetricCard'
 import ConopeptidePagination from '@/features/conopeptides/components/ConopeptidePagination'
 import ConopeptideSidebar from '@/features/conopeptides/components/ConopeptideSidebar'
 import ConopeptideTableCard from '@/features/conopeptides/components/ConopeptideTableCard'
 import {
   conopeptideExplorerBreadcrumbs,
   conopeptideExplorerMeta,
-  conopeptideExplorerMetrics,
   conopeptideExplorerRows,
   conopeptideFilterOptions,
   conopeptidePagination,
@@ -40,18 +38,6 @@ export default function ConopeptidesExplorerPage() {
         />
       }
     >
-      <section className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-        {conopeptideExplorerMetrics.map((metric) => (
-          <ConopeptideMetricCard
-            key={metric.label}
-            icon={metric.icon}
-            value={metric.value}
-            label={metric.label}
-            description={metric.description}
-          />
-        ))}
-      </section>
-
       <ConopeptideTableCard
         title="Conopeptide Precursors"
         action={
