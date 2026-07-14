@@ -27,7 +27,7 @@ export default function ConopeptideLayout({
       </header>
 
       <div className="grid gap-6 lg:grid-cols-[290px_minmax(0,1fr)] lg:items-start">
-        {sidebar ? <aside className="lg:sticky lg:top-28">{sidebar}</aside> : null}
+        {sidebar ? <aside>{sidebar}</aside> : null}
         <main className="min-w-0 space-y-8">{children}</main>
       </div>
     </div>

@@ -24,7 +24,7 @@ export default function SpeciesExplorerPage() {
       </section>
 
       <div className="grid gap-6 lg:grid-cols-[300px_minmax(0,1fr)] lg:items-start">
-        <aside className="lg:sticky lg:top-28">
+        <aside>
           <SpeciesExplorerFilters />
         </aside>
 
