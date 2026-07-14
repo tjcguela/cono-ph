@@ -29,11 +29,11 @@ export default function Navbar() {
   return (
     <header className="relative z-30">
       <div className="app-container pt-3 sm:pt-4">
-        <div className="grid grid-cols-[auto_1fr_auto] items-center gap-3 sm:gap-4">
+        <div className="grid grid-cols-[auto_1fr_auto] items-center gap-4 sm:gap-6 lg:items-start lg:pt-1">
           <NavLink
             to="/"
             end
-            className="text-[1.15rem] font-medium tracking-tight text-black sm:text-[1.3rem] lg:text-[1.55rem]"
+            className="pl-1 py-1 text-[1.15rem] font-medium tracking-tight text-black sm:text-[1.3rem] lg:pl-2 lg:py-2.5 lg:text-[1.55rem]"
           >
             ConoPH
           </NavLink>
@@ -41,11 +41,11 @@ export default function Navbar() {
           <div className="hidden justify-center lg:flex">
             <PrimaryNav
               isSolid={isScrolled}
-              className="fixed left-1/2 top-4 z-40 w-[min(920px,calc(100vw-6rem))] -translate-x-1/2 lg:top-5 xl:w-[min(980px,calc(100vw-8rem))]"
+              className="fixed left-1/2 top-4 z-40 -translate-x-1/2 lg:top-5"
             />
           </div>
 
-          <div className="flex items-center justify-end gap-3">
+          <div className="flex items-center justify-end gap-3 py-1 lg:pr-2 lg:py-2.5">
             <div className="hidden lg:block">
               <Button as="a" href="/#contact" variant="primary" size="sm">
                 Contact Us

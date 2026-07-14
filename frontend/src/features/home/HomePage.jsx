@@ -41,7 +41,7 @@ export default function HomePage() {
             Database for Philippine Cone Snails and Conopeptides
           </p>
         </div>
-        <div className="relative mx-auto mt-4 h-[210px] w-full max-w-[1240px] overflow-visible sm:mt-8 sm:h-[300px] md:h-[330px] xl:h-[370px] xl:max-w-[1380px]">
+        <div className="relative mt-4 h-[210px] w-full overflow-visible sm:mt-8 sm:h-[300px] md:h-[330px] xl:h-[370px]">
           <HomeShellBackdrop />
           <img
             src={homeShellImage}
