@@ -1,5 +1,5 @@
-import RoutePlaceholder from '@/components/common/RoutePlaceholder'
+import PublicationsExplorerPage from '@/features/publications/PublicationsExplorerPage'
 
 export default function PublicationsPage() {
-  return <RoutePlaceholder title="Publications" />
+  return <PublicationsExplorerPage />
 }

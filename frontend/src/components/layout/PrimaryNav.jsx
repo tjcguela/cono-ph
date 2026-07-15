@@ -3,7 +3,7 @@ import { NavLink } from 'react-router-dom'
 import { navigationLinks } from '@/utils/navigation'
 import { cn } from '@/utils/cn'
 
-const primaryLinkOrder = ['Home', 'Conopeptides', 'Species', 'Biomarkers', 'Visualization', 'About']
+const primaryLinkOrder = ['Home', 'Conopeptides', 'Species', 'Biomarkers', 'Visualization', 'Publications', 'About']
 const primaryLinks = primaryLinkOrder
   .map((label) => navigationLinks.find((link) => link.label === label))
   .filter(Boolean)
@@ -14,9 +14,9 @@ export default function PrimaryNav({ className, isSolid = false, mobile = false 
       className={cn(
         mobile
           ? 'rounded-[1.5rem] px-4 py-4'
-          : 'flex flex-wrap items-center justify-center gap-x-5 gap-y-3 rounded-full px-5 py-2.5 transition-all duration-300 lg:px-7',
+          : 'flex flex-nowrap items-center justify-center gap-x-3 whitespace-nowrap rounded-full px-4 py-2.5 transition-all duration-300 xl:gap-x-4 xl:px-6',
         isSolid
-          ? 'border border-black/5 bg-white/90 shadow-[0_14px_36px_rgba(0,0,0,0.1)] backdrop-blur-xl'
+          ? 'border border-brand-800 bg-brand-700 shadow-[0_14px_36px_rgba(86,101,24,0.18)] backdrop-blur-xl'
           : 'border border-transparent bg-transparent shadow-none backdrop-blur-0',
         className,
       )}
@@ -31,12 +31,19 @@ export default function PrimaryNav({ className, isSolid = false, mobile = false 
             className={({ isActive }) =>
               cn(
                 mobile
-                  ? 'rounded-xl px-3 py-2 text-sm font-semibold text-black transition hover:bg-brand-50 hover:text-brand-700'
-                  : 'px-1 py-1.5 text-[0.93rem] font-semibold text-black transition hover:text-brand-700',
+                  ? 'rounded-xl px-3 py-2 text-sm font-semibold transition hover:bg-brand-50'
+                  : 'px-1 py-1.5 text-[0.86rem] font-semibold transition xl:text-[0.9rem]',
+                isSolid
+                  ? 'text-white hover:text-white'
+                  : 'text-black hover:text-brand-700',
                 isActive &&
                   (mobile
-                    ? 'bg-brand-50 text-brand-700'
-                    : 'border-b-2 border-brand-600 text-brand-700'),
+                    ? isSolid
+                      ? 'bg-brand-800 text-white'
+                      : 'bg-brand-50 text-brand-700'
+                    : isSolid
+                      ? 'border-b-2 border-white text-white'
+                      : 'border-b-2 border-brand-600 text-brand-700'),
               )
             }
           >
