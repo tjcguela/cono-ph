@@ -1,9 +1,8 @@
 import { Link } from 'react-router-dom'
+import { AreaChart, BarList, Card as TremorCard, DonutChart, Metric, Text, Title } from '@tremor/react'
 
 import Button from '@/components/ui/Button'
-import Card from '@/components/ui/Card'
 import ChartCard from '@/features/visualization/components/ChartCard'
-import { DonutChartPlaceholder } from '@/features/visualization/components/ChartPlaceholders'
 import VisualizationLayout from '@/features/visualization/components/VisualizationLayout'
 import {
   visualizationBreadcrumbs,
@@ -11,6 +10,14 @@ import {
   visualizationMeta,
   visualizationMetrics,
   visualizationOverviewCards,
+  biomarkerCoverageData,
+  biomarkerDensityByProvince,
+  conopeptideLengthBins,
+  conopeptideSuperfamilyLegend,
+  speciesProvinceCoverage,
+  speciesProvinceLegend,
+  speciesTopSequencedSpecies,
+  biomarkerTypeLegend,
 } from '@/features/visualization/data/visualizationMockData'
 
 function PreviewList({ title, items }) {
@@ -44,6 +51,16 @@ function OverviewPreviewCard({ card }) {
   const showStaticMap = Boolean(card.previewImage)
   const Icon = card.icon
 
+  const speciesChartData = speciesTopSequencedSpecies.map((item) => ({
+    name: item.name,
+    value: item.value,
+  }))
+
+  const biomarkerChartData = biomarkerCoverageData.map((item) => ({
+    name: item.label,
+    value: item.value,
+  }))
+
   return (
     <ChartCard
       title={card.title}
@@ -71,11 +88,40 @@ function OverviewPreviewCard({ card }) {
               />
             </div>
           ) : (
-            <div className="overflow-hidden rounded-3xl border border-[var(--app-border)] bg-white p-3">
-              <div className="rounded-2xl border border-dashed border-brand-200 bg-brand-50/40 p-3">
-                <DonutChartPlaceholder className="min-h-[300px]" />
+            <TremorCard className="border border-[var(--app-border)] bg-white p-4 shadow-none">
+              <Title className="text-[1rem] font-medium text-[var(--app-muted)]">{card.previewTitle}</Title>
+              <Metric className="mt-2 text-[2rem] leading-none text-[var(--app-text)]">
+                {card.id === 'conopeptides' ? '3,671' : '312'}
+              </Metric>
+              <Text className="mt-1 text-sm text-[var(--app-muted)]">
+                {card.id === 'conopeptides'
+                  ? 'Conopeptide superfamily distribution'
+                  : 'Marker coverage across species'}
+              </Text>
+
+              <div className="mt-5">
+                {card.id === 'conopeptides' ? (
+                  <DonutChart
+                    data={conopeptideSuperfamilyLegend.map((item) => ({
+                      name: item.label,
+                      value: item.count,
+                    }))}
+                    category="name"
+                    value="value"
+                    variant="donut"
+                    className="h-72"
+                  />
+                ) : (
+                  <DonutChart
+                    data={biomarkerChartData}
+                    category="name"
+                    value="value"
+                    variant="donut"
+                    className="h-72"
+                  />
+                )}
               </div>
-            </div>
+            </TremorCard>
           )}
         </section>
 
@@ -116,6 +162,21 @@ function MetricJoinCard({ metric }) {
 }
 
 export default function VisualizationPage() {
+  const speciesAreaData = speciesProvinceCoverage.map((value, index) => ({
+    province: `Province ${index + 1}`,
+    Species: value.value,
+  }))
+
+  const biomarkerBarData = biomarkerDensityByProvince.map((item) => ({
+    name: item.label,
+    biomarker: item.value,
+  }))
+
+  const conopeptideLineData = conopeptideLengthBins.map((item) => ({
+    range: item.label,
+    count: item.value,
+  }))
+
   return (
     <VisualizationLayout
       breadcrumbs={visualizationBreadcrumbs}
@@ -134,7 +195,69 @@ export default function VisualizationPage() {
         ))}
       </section>
 
-      <Card className="space-y-5 bg-brand-50/20 p-5 sm:p-6">
+      <div className="grid gap-5 xl:grid-cols-3">
+        <TremorCard className="xl:col-span-2 border border-[var(--app-border)] bg-white p-4 shadow-sm sm:p-5">
+          <Title className="text-[1.2rem] text-[var(--app-text)]">Species coverage</Title>
+          <Text className="mt-1 text-sm text-[var(--app-muted)]">
+            Species distribution by province and sequencing coverage.
+          </Text>
+          <AreaChart
+            className="mt-6 h-80"
+            data={speciesAreaData}
+            index="province"
+            categories={['Species']}
+            colors={['indigo']}
+            yAxisWidth={40}
+            showLegend={false}
+          />
+        </TremorCard>
+
+        <TremorCard className="border border-[var(--app-border)] bg-white p-4 shadow-sm sm:p-5">
+          <Title className="text-[1.2rem] text-[var(--app-text)]">Biomarker density</Title>
+          <Text className="mt-1 text-sm text-[var(--app-muted)]">Top provinces by biomarker records.</Text>
+          <div className="mt-6">
+            <BarList
+              data={biomarkerBarData}
+              valueFormatter={(value) => `${value}`}
+            />
+          </div>
+        </TremorCard>
+      </div>
+
+      <div className="grid gap-5 xl:grid-cols-2">
+        <TremorCard className="border border-[var(--app-border)] bg-white p-4 shadow-sm sm:p-5">
+          <Title className="text-[1.2rem] text-[var(--app-text)]">Conopeptide length bins</Title>
+          <Text className="mt-1 text-sm text-[var(--app-muted)]">Sequence length distribution across precursors.</Text>
+          <AreaChart
+            className="mt-6 h-72"
+            data={conopeptideLineData}
+            index="range"
+            categories={['count']}
+            colors={['amber']}
+            yAxisWidth={40}
+            showLegend={false}
+          />
+        </TremorCard>
+
+        <TremorCard className="border border-[var(--app-border)] bg-white p-4 shadow-sm sm:p-5">
+          <Title className="text-[1.2rem] text-[var(--app-text)]">Coverage snapshot</Title>
+          <Text className="mt-1 text-sm text-[var(--app-muted)]">Species with biomarker data vs. without data.</Text>
+          <div className="mt-6">
+            <DonutChart
+              data={biomarkerCoverageData.map((item) => ({
+                name: item.label,
+                value: item.value,
+              }))}
+              category="name"
+              value="value"
+              variant="donut"
+              className="h-72"
+            />
+          </div>
+        </TremorCard>
+      </div>
+
+      <div className="space-y-5 bg-brand-50/20 p-5 sm:p-6">
         <div className="grid gap-4 xl:grid-cols-[280px_minmax(0,1fr)] xl:items-start">
           <div className="space-y-2">
             <h2 className="text-[1.8rem] leading-none text-black">Cross-Data Insights</h2>
@@ -149,7 +272,7 @@ export default function VisualizationPage() {
             ))}
           </div>
         </div>
-      </Card>
+      </div>
     </VisualizationLayout>
   )
 }

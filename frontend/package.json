@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.3.1",
+    "@tremor/react": "^3.18.7",
     "axios": "^1.18.1",
     "daisyui": "^5.6.3",
     "lucide-react": "^1.22.0",
