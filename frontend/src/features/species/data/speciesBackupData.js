@@ -3,6 +3,21 @@ import speciesShellImage from '@/assets/HomeShell.png'
 const SPECIES_BACKUP_PATH = '/backup-data/json/species/latest.json'
 const TAXONOMIC_BACKUP_PATH = '/backup-data/json/taxonomic/latest.json'
 
+function toDirectImageUrl(value) {
+  const link = String(value ?? '').trim()
+
+  if (!link) {
+    return speciesShellImage
+  }
+
+  const driveMatch = link.match(/drive\.google\.com\/file\/d\/([^/]+)/i)
+  if (driveMatch?.[1]) {
+    return `https://drive.google.com/uc?export=view&id=${driveMatch[1]}`
+  }
+
+  return link
+}
+
 function normalizeSpeciesRecord(record) {
   return {
     speciesId: String(record['Species ID'] ?? record.speciesId ?? record.species_id ?? record.id ?? ''),
@@ -22,7 +37,7 @@ function normalizeSpeciesRecord(record) {
     sequencingPlatform: String(record['Sequencing platform'] ?? record.sequencingPlatform ?? record.sequencing_platform ?? ''),
     tissueSource: String(record['Tissue source'] ?? record.tissueSource ?? record.tissue_source ?? ''),
     rawDataInNcbiSra: Boolean(record.rawDataInNcbiSra ?? record.raw_data_in_ncbi_sra ?? false),
-    image: speciesShellImage,
+    image: toDirectImageUrl(record['Shell image'] ?? record.image ?? record.imageUrl ?? record.image_url),
     imagePosition: 'center center',
   }
 }
@@ -81,6 +96,7 @@ export async function loadSpeciesBackupRecords() {
         genusName: normalized.genusName || taxonomic.genusName,
         subgenus: normalized.subgenus || taxonomic.subgenus,
         tissueSource: normalized.tissueSource || taxonomic.tissueSource || '',
+        image: normalized.image || speciesShellImage,
       }
     })
     .filter((record) => record.speciesId)
