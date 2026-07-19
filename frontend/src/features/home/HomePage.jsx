@@ -1,10 +1,14 @@
 import { ArrowRight } from 'lucide-react'
 import { Link } from 'react-router-dom'
+import { useEffect } from 'react' // added in for async processing by backend
 
 import homeShellImage from '@/assets/HomeShell.png'
 import Button from '@/components/ui/Button'
 import HomeShellBackdrop from '@/features/home/components/HomeShellBackdrop'
 import HomeDashboardSection from '@/features/home/components/HomeDashboardSection'
+
+// backend controllers
+import { useFunctionalityItemData } from "../../../fetch-db/useFunctionalityItem";
 
 const functionalityItems = [
   {
@@ -30,6 +34,16 @@ const functionalityItems = [
 ]
 
 export default function HomePage() {
+   // fetching data from backend
+   const { functionalityItem, loading, error, fetchFunctionalityItem } = useFunctionalityItemData();
+   
+   useEffect(() => 
+    {
+      fetchFunctionalityItem()
+    }, [fetchFunctionalityItem]);
+
+  console.log("functionality item", functionalityItem);
+
   return (
     <div className="space-y-10 pb-4 pt-0 sm:space-y-12 sm:pt-0">
       <section className="mx-auto w-full max-w-[1600px] space-y-4 pt-2 text-center sm:space-y-5">
@@ -60,7 +74,7 @@ export default function HomePage() {
           Core Functionalities
         </h2>
         <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-4">
-          {functionalityItems.map((item) => (
+          {functionalityItem.map((item) => (
             <div key={item.number} className="space-y-4 border-t border-black/10 pt-4">
               <div className="text-3xl font-light text-black/35 sm:text-4xl">{item.number}</div>
               <div className="space-y-2">
