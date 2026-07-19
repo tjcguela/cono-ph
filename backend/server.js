@@ -4,9 +4,11 @@ import helmet from "helmet";
 import morgan from "morgan";
 import cors from "cors";
 import dotenv from "dotenv";
+import { NeonDbError } from "@neondatabase/serverless";
 
 // from directory
 import speciesRoutes from "./routes/speciesRoutes.js";
+import functionalityItemRoutes from "./routes/functionalityItemRoutes.js";
 import { sql } from "./config/db.js";
 import { aj } from "./lib/arcjet.js";
 
@@ -70,9 +72,21 @@ app.use(morgan("dev")); // log requests
 
 // API handling
 app.use("/api/species", speciesRoutes);
+app.use("/api/functionalityItem", functionalityItemRoutes);
 
 async function initializeDB() {
     try {
+         // create FUNCTIONALITY_ITEMS table
+        await sql `
+            CREATE TABLE IF NOT EXISTS functionality_item (
+                number SERIAL PRIMARY KEY,
+                title VARCHAR(255) NOT NULL,
+                description TEXT,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            )
+        `;
+
+        // create SPECIES table
         await sql`
             CREATE TABLE IF NOT EXISTS species(
                 id VARCHAR(20) PRIMARY KEY,
@@ -93,6 +107,7 @@ async function initializeDB() {
             );
         `;
 
+        // create conopeptide table
         await sql`
             CREATE TABLE IF NOT EXISTS conopeptide(
                 id VARCHAR(20) PRIMARY KEY,
@@ -118,6 +133,7 @@ async function initializeDB() {
             );
         `;
 
+        // create barcode table
         await sql`
             CREATE TABLE IF NOT EXISTS barcode(
                 specimen_id VARCHAR(20) PRIMARY KEY,
@@ -136,6 +152,7 @@ async function initializeDB() {
             );
         `;
 
+        // create publication table
         await sql`
             CREATE TABLE IF NOT EXISTS publication (
                 id VARCHAR(20) PRIMARY KEY,
@@ -147,8 +164,9 @@ async function initializeDB() {
             );
         `;
 
+        // create taxonomic table
         await sql`
-            CREATE TABLE IF NOT EXISTS taxonomy (
+            CREATE TABLE IF NOT EXISTS taxonomic (
                 id VARCHAR(20) PRIMARY KEY,
                 domain VARCHAR(255), 
                 kingdom VARCHAR(255),
@@ -168,7 +186,370 @@ async function initializeDB() {
     }
 }
 
-initializeDB().then(() => {
+async function seedDB(){
+    try {
+
+        // seed FUNCTIONALITY_ITEM table
+        await sql`
+            INSERT INTO functionality_item (number, title, description)
+            VALUES 
+                (1, 'Species Taxonomy', 'Classification and species records'),
+                (2, 'Collection Metadata', 'Location, specimen, collection info'),
+                (3, 'Molecular Data', 'Transcriptomes and conopeptides'),
+                (4, 'Visualization & Search', 'Interactive exploration and filtering')
+            
+            ON CONFLICT (number) DO NOTHING; 
+        `;
+
+        // seed SPECIES table
+        await sql`
+                INSERT INTO species (
+                    id, 
+                    scientific_name, 
+                    common_name, 
+                    subgenus,
+                    diet_type,
+                    region,
+                    province,
+                    municipality,
+                    shell_image,
+                    tissue_source,
+                    num_coi,
+                    num_conopeptides,
+                    doi,
+                    species_depository
+                )
+                
+                VALUES (
+                    '856252_CE1',
+                    'Conus eburneus',
+                    'Ivory cone',
+                    'Tesseliconus',
+                    'Vermivorous',
+                    '0700000000',
+                    'Cebu',
+                    'Caw-oy',
+                    '/species-images/eburneus.jpg',
+                    'Venom gland tissues',
+                    0,
+                    260,
+                    'https://doi.org/10.3389/fmars.2025.1616692',
+                    'The Marine Science Institute (MSI)'
+                ),
+                (
+                    '856252_CE2',
+                    'Conus eburneus',
+                    'Ivory cone',
+                    'Tesseliconus',
+                    'Vermivorous',
+                    '0700000000',
+                    'Cebu',
+                    'Caw-oy',
+                    '/species-images/eburneus.jpg',
+                    'Venom gland tissues',
+                    0,
+                    149,
+                    'https://doi.org/10.3390/md18100503, https://doi.org/10.1002/psc.3179',
+                    'The Marine Science Institute (MSI)'
+                ),
+                (
+                    '853932_CI1',
+                    'Conus imperialis',
+                    'Imperial cone',
+                    'Stephanoconus',
+                    'Vermivorous',
+                    '0700000000',
+                    'Cebu',
+                    'Caw-oy',
+                    '/species-images/imperialis.jpg',
+                    'Venom gland tissues',
+                    1,
+                    150,
+                    'Under Review',
+                    'The Marine Science Institute (MSI)'
+                ),
+                (
+                    '856256_CT1',
+                    'Conus tessulatus',
+                    'Tesselate cone',
+                    'Tesseliconus',
+                    'Vermivorous',
+                    '0700000000',
+                    'Cebu',
+                    'Caw-oy',
+                    '/species-images/tessulatus.jpg',
+                    'Venom gland tissues',
+                    0,
+                    339,
+                    'https://doi.org/10.3389/fmars.2025.1616692',
+                    'The Marine Science Institute (MSI)'
+                ),
+                (
+                    '852344_CM1',
+                    'Conus mustelinus',
+                    'Weasel cone',
+                    'Rhizoconus',
+                    'Vermivorous',
+                    '0700000000',
+                    'Cebu',
+                    'Caw-oy',
+                    '/species-images/mustelinus.jpg',
+                    'Venom gland tissues',
+                    0,
+                    168,
+                    'https://doi.org/10.3390/md23070266',
+                    'The Marine Science Institute (MSI)'
+                ),
+                (
+                    '852343_CM1',
+                    'Conus miles',
+                    'Soldier cone',
+                    'Rhizoconus',
+                    'Vermivorous',
+                    '1700000000',
+                    'Marinduque',
+                    'Buenavista',
+                    '/species-images/mustelinus.jpg',
+                    'Venom gland tissues',
+                    0,
+                    121,
+                    'https://doi.org/10.3390/md23070266',
+                    'The Marine Science Institute (MSI)'
+                ),
+                (
+                    '852340_CC1',
+                    'Conus capitaneus',
+                    'Captain cone',
+                    'Rhizoconus',
+                    'Vermivorous',
+                    '0700000000',
+                    'Cebu',
+                    'Caw-oy',
+                    '/species-images/capitaneus.jpg',
+                    'Venom gland tissues',
+                    0,
+                    225,
+                    'https://doi.org/10.3390/md23070266',
+                    'The Marine Science Institute (MSI)'
+                ),
+                (
+                    '215429_CM1',
+                    'Conus magus',
+                    'Magician cone',
+                    'Pionoconus',
+                    'Piscivorous',
+                    '1700000000',
+                    'Marinduque',
+                    'Buenavista',
+                    '/species-images/magus.jpg',
+                    'Venom gland tissues',
+                    0,
+                    90,
+                    'Unpublished',
+                    'The Marine Science Institute (MSI)'
+                ),
+                (
+                    '428368_CS1',
+                    'Conus striolatus',
+                    'Striolate cone',
+                    'Pionoconus',
+                    'Piscivorous',
+                    '1700000000',
+                    'Marinduque',
+                    'Buenavista',
+                    '/species-images/striolatus.jpg',
+                    'Venom gland tissues',
+                    0,
+                    56,
+                    'Unpublished',
+                    'The Marine Science Institute (MSI)'
+                ),
+                (
+                    '428363_CS1',
+                    'Conus stercusmuscarum',
+                    'Fly-specked cone',
+                    'Pionoconus',
+                    'Piscivorous',
+                    '1700000000',
+                    'Marinduque',
+                    'Buenavista',
+                    '/species-images/stercusmuscarum.jpg',
+                    'Venom gland tissues',
+                    0,
+                    42,
+                    'Unpublished',
+                    'The Marine Science Institute (MSI)'
+                ),
+                (
+                    '843072_CR1',
+                    'Conus rolani',
+                    'Rolan cone',
+                    'Asprella',
+                    'Piscivorous',
+                    '0700000000',
+                    'Cebu',
+                    'Sogod',
+                    '/species-images/rolani.jpg',
+                    'Venom gland tissues',
+                    0,
+                    70,
+                    'https://doi.org/10.54645/202417SupQCH-42',
+                    'The Marine Science Institute (MSI)'
+                ),
+                (
+                    '853645_CT1',
+                    'Conus tribblei',
+                    'Tribble cone',
+                    'Splinoconus',
+                    'Vermivorous',
+                    '0700000000',
+                    'Cebu',
+                    'Sogod',
+                    '/species-images/tribblei.jpg',
+                    'Venom gland tissues',
+                    0,
+                    69,
+                    'https://doi.org/10.1093/molbev/msae120',
+                    'The Marine Science Institute (MSI)'
+                ),
+                (
+                    '853642_CL1',
+                    'Conus lenavati',
+                    'Unavailable',
+                    'Splinoconus',
+                    'Vermivorous',
+                    '0700000000',
+                    'Cebu',
+                    'Sogod',
+                    '/species-images/lenavati.png',
+                    'Venom gland tissues',
+                    3,
+                    132,
+                    'https://doi.org/10.1093/gbe/evv109',
+                    'The Marine Science Institute (MSI)'
+                ),
+                (
+                    '853645_CT2',
+                    'Conus tribblei',
+                    'Tribble cone',
+                    'Splinoconus',
+                    'Vermivorous',
+                    '0700000000',
+                    'Cebu',
+                    'Sogod',
+                    '/species-images/tribblei.jpg',
+                    'Venom gland tissues',
+                    3,
+                    100,
+                    'https://doi.org/10.1093/gbe/evv109',
+                    'The Marine Science Institute (MSI)'
+                ),
+                (
+                    '845894_CG1',
+                    'Conus geographus',
+                    'Geographer cone',
+                    'Gastridium',
+                    'Piscivorous',
+                    '0700000000',
+                    'Cebu',
+                    'Caw-oy',
+                    '/species-images/geographus.jpeg',
+                    'Venom gland tissues',
+                    0,
+                    69,
+                    'https://doi.org/10.1093/molbev/msae120',
+                    'University of Utah'
+                ),
+                (
+                    '843253_CG1',
+                    'Conus gloriamaris',
+                    'Glory of the Sea cone',
+                    'Cylinder',
+                    'Molluscivorous',
+                    '0700000000',
+                    'Bohol',
+                    'Panglao',
+                    '/species-images/gloriamaris.jpg',
+                    'Venom gland tissues',
+                    0,
+                    109,
+                    'https://doi.org/10.3390/md15050145',
+                    'University of Utah'
+                ),
+                (
+                    '836797_CB1',
+                    'Conus bandanus',
+                    'Banded Marble cone',
+                    'Conus',
+                    'Molluscivorous',
+                    '0700000000',
+                    'Cebu',
+                    'Caw-oy',
+                    '/species-images/bandanus.jpg',
+                    'Venom gland tissues',
+                    1,
+                    173,
+                    'Unpublished',
+                    'The Marine Science Institute (MSI)'
+                ),
+                (
+                    '428363_CS2',
+                    'Conus stercusmuscarum',
+                    'Fly-specked cone',
+                    'Pionoconus',
+                    'Piscivorous',
+                    '0700000000',
+                    'Cebu',
+                    'Caw-oy',
+                    '/species-images/stercusmuscarum.jpg',
+                    'Venom gland tissues',
+                    1,
+                    139,
+                    'Unpublished',
+                    'The Marine Science Institute (MSI)'
+                ),
+                (
+                    '848247_CF1',
+                    'Conus flavus',
+                    'Unavailable',
+                    'Phasmoconus',
+                    'Piscivorous',
+                    '1700000000',
+                    'Marinduque',
+                    'Buenavista',
+                    '/species-images/flavus.png',
+                    'Venom gland tissues',
+                    1,
+                    226,
+                    'Unpublished',
+                    'The Marine Science Institute (MSI)'
+                )
+                ON CONFLICT (id) DO NOTHING;
+        `;
+
+        // seed CONOPEPTIDE table
+        await sql`
+        
+        `;
+        // seed BARCODE table
+        // seed PUBLICATION table
+        // seed TAXONOMIC table
+
+
+
+        console.log("Database seeded succesfully");
+    } 
+    catch (error) {
+        if (error instanceof NeonDbError){
+            console.log("Invalid syntax from function seedDB", error)
+        }
+        else {
+            console.log("ERROR seeding DB from function seedDB", error);
+        }
+    }
+}
+
+initializeDB().then(seedDB()).then(() => {
     // listen to port
     app.listen(PORT, () => {
         console.log("Server is listening at: " + String(PORT));
