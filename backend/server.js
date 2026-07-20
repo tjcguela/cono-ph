@@ -122,14 +122,15 @@ async function initializeDB() {
                 gene_superfamily VARCHAR(255), 
                 matched_toxin VARCHAR(50),
                 percent_similarity REAL,
-                source_percent_similarity VARCHAR(5), 
+                source_percent_similarity VARCHAR(20), 
                 expression_value REAL,
                 doi TEXT,
                 len_precursor_sequence SMALLINT,
                 len_mature_conopeptide SMALLINT,
                 num_cysteine_residues SMALLINT,
-                cysteine_pattern VARCHAR(10),
-                cysteine_framework VARCHAR(10)
+                cysteine_pattern VARCHAR(20),
+                cysteine_framework VARCHAR(20),
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             );
         `;
 
@@ -148,19 +149,22 @@ async function initializeDB() {
                 db_sequence VARCHAR(255),
                 accession_external VARCHAR(50),
                 validation_status VARCHAR(255),
-                publication_doi TEXT
+                publication_doi TEXT,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             );
         `;
 
         // create publication table
         await sql`
             CREATE TABLE IF NOT EXISTS publication (
-                id VARCHAR(20) PRIMARY KEY,
+                id SERIAL PRIMARY KEY,
+                title TEXT NOT NULL,
                 author VARCHAR(255) NOT NULL,
-                year_published VARCHAR(4) NOT NULL,
+                year_published SMALLINT NOT NULL,
                 journal VARCHAR(255),
                 doi TEXT NOT NULL,
-                species_reported VARCHAR(255)
+                species_reported VARCHAR(255),
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             );
         `;
 
@@ -176,7 +180,8 @@ async function initializeDB() {
                 family VARCHAR(255),
                 genus VARCHAR(255),
                 subgenus VARCHAR(255),
-                species VARCHAR(255) NOT NULL
+                species VARCHAR(255) NOT NULL,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             )
         `;
 
@@ -529,11 +534,517 @@ async function seedDB(){
 
         // seed CONOPEPTIDE table
         await sql`
-        
+            INSERT INTO conopeptide
+            (
+                id, 
+                species_id, 
+                scientific_name, 
+                precursor_sequence, 
+                remark_sequence, 
+                signal_peptide, 
+                propeptide_sequence, 
+                mature_peptide_sequence, 
+                post_peptide_sequence, 
+                gene_superfamily, 
+                matched_toxin, 
+                percent_similarity, 
+                source_percent_similarity,  
+                expression_value, 
+                doi, 
+                len_precursor_sequence, 
+                len_mature_conopeptide, 
+                num_cysteine_residues, 
+                cysteine_pattern, 
+                cysteine_framework
+            )
+            
+            VALUES
+            (
+                '215429_CM1_10',
+                'Conus magus',
+                '215429_CM1',
+                'MMFRLTTVSCFLLVIVLLNLVVLTDAMMFRLTTVSCFLLVIVLLNLVVLTDACYYDVGDPCSSNKECCISECCDGICLPWCTWPVYKRCYYDVGDPCSSNKECCISECCDGICLPWCTWPVYKR',
+                'Full-Length',
+                'MMFRLTTVSCFLLVIVLLNLVVLTDA',
+                'MMFRLTTVSCFLLVIVLLNLVVLTDACYYDVGDPCSSNKECCISECCDGICLPWCTWPVYKR',
+                'CYYDVGDPCSSNKECCISECCDGICLPWCTWPVY',
+                'KR',
+                'I2',
+                'Unidentified',
+                0.00,
+                'Unavailable',
+                5.01,
+                'Unpublished',
+                124,
+                34,
+                8,
+                'C-C-CC-CC-C-C',
+                'XI'
+            ),
+            (
+                '215429_CM1_11',
+                'Conus magus',
+                '215429_CM1',
+                'MKLTCALIITVLFLSITAMKLTCALIITVLFLSITADDSRGKQRYSALKSIAGMLKSKTVRECRQQSEGCTNSSPPCCPGLSCRGQSQGGVCTVRECRQQSEGCTNSSPPCCPGLSCRGQSQGGVC',
+                'Partial',
+                'MKLTCALIITVLFLSITA',
+                'MKLTCALIITVLFLSITADDSRGKQRYSALKSIAGMLKSKTVRECRQQSEGCTNSSPPCCPGLSCRGQSQGGVC',
+                'TVRECRQQSEGCTNSSPPCCPGLSCRGQSQGGVC',
+                'Unavailable',
+                'O1',
+                'Unidentified',
+                0.00,
+                'Unavailable',
+                46.33,
+                'Unpublished',
+                126,
+                34,
+                6,
+                'C-C-CC-C-C',
+                'VI/VII'
+            ),
+            (
+                '215429_CM1_12',
+                'Conus magus',
+                '215429_CM1',
+                'MKLTCALIITVLFLSITAMKLTCALIITVLFLSITADDSRGKQGYRALKSIAGMLNSKTVRECREQSQGCTNTSPPCCSGLRCSGQSQGGVCISNTVRECREQSQGCTNTSPPCCSGLRCSGQSQGGVCISN',
+                'Partial',
+                'MKLTCALIITVLFLSITA',
+                'MKLTCALIITVLFLSITADDSRGKQGYRALKSIAGMLNSKTVRECREQSQGCTNTSPPCCSGLRCSGQSQGGVCISN',
+                'TVRECREQSQGCTNTSPPCCSGLRCSGQSQGGVCISN',
+                'Unavailable',
+                'O1',
+                'Unidentified',
+                0.00,
+                'Unavailable',
+                31.19,
+                'Unpublished',
+                132,
+                37,
+                6,
+                'C-C-CC-C-C',
+                'VI/VII'
+            ),
+            (
+                '215429_CM1_13',
+                'Conus magus',
+                '215429_CM1',
+                'MMTLKHVLLFTLLLLPLATIRAMMTLKHVLLFTLLLLPLATIRAEVYACTYWTSPGWAVKRCQTHSDCVPYCGTHFRCRCQPGANLCPGGAGCFEVYACTYWTSPGWAVKRCQTHSDCVPYCGTHFRCRCQPGANLCPGGAGCF',
+                'Partial',
+                'MMTLKHVLLFTLLLLPLATIRA',
+                'MMTLKHVLLFTLLLLPLATIRAEVYACTYWTSPGWAVKRCQTHSDCVPYCGTHFRCRCQPGANLCPGGAGCF',
+                'EVYACTYWTSPGWAVKRCQTHSDCVPYCGTHFRCRCQPGANLCPGGAGCF',
+                'Unavailable',
+                'Unidentified',
+                'Unidentified',
+                0.00,
+                'Unavailable',
+                1.93,
+                'Unpublished',
+                144,
+                50,
+                8,
+                'C-C-C-C-C-C-C-C',
+                'XXII'
+            ),
+            (
+                '215429_CM1_14',
+                'Conus magus',
+                '215429_CM1',
+                'MNTAGRLLLLCLALGLVFESLGMNTAGRLLLLCLALGLVFESLGIPVADDVKADRDTDPDDEDPRGLDLWEPIQTMCGDKLCDFGCCFTVFGVRKCKPFHCPGLDLWEPIQTMCGDKLCDFGCCFTVFGVRKCKPFHCP',
+                'Partial',
+                'MNTAGRLLLLCLALGLVFESLG',
+                'MNTAGRLLLLCLALGLVFESLGIPVADDVKADRDTDPDDEDPRGLDLWEPIQTMCGDKLCDFGCCFTVFGVRKCKPFHCP',
+                'GLDLWEPIQTMCGDKLCDFGCCFTVFGVRKCKPFHCP',
+                'Unavailable',
+                'H',
+                'Unidentified',
+                0.00,
+                'Unavailable',
+                17.09,
+                'Unpublished',
+                139,
+                37,
+                6,
+                'C-C-CC-C-C',
+                'VI/VII'
+            ),
+            (
+                '215429_CM1_15',
+                'Conus magus',
+                '215429_CM1',
+                'MNCLPLFFIVLLLIAHSMNCLPLFFIVLLLIAHSSQVVEHSKLKRTKMLRRSTTRDDDEEALELCCAAGSTFCCAARWHFSTTRDDDEEALELCCAAGSTFCCAARWHF',
+                'Partial',
+                'MNCLPLFFIVLLLIAHS',
+                'MNCLPLFFIVLLLIAHSSQVVEHSKLKRTKMLRRSTTRDDDEEALELCCAAGSTFCCAARWHF',
+                'STTRDDDEEALELCCAAGSTFCCAARWHF',
+                'Unavailable',
+                'T',
+                'Unidentified',
+                0.00,
+                'Unavailable',
+                4.4,
+                'Unpublished',
+                109,
+                29,
+                4,
+                'CC-CC',
+                'V'
+            ),
+            (
+                '215429_CM1_16',
+                'Conus magus',
+                '215429_CM1',
+                'MNCLPLFFIVLLLIAHSMNCLPLFFIVLLLIAHSSQVVEHSKLKRTKMLRRSTARVASEEKFEECCLEDAVFCCAARAEELSTARVASEEKFEECCLEDAVFCCAARAEEL',
+                'Partial',
+                'MNCLPLFFIVLLLIAHS',
+                'MNCLPLFFIVLLLIAHSSQVVEHSKLKRTKMLRRSTARVASEEKFEECCLEDAVFCCAARAEEL',
+                'STARVASEEKFEECCLEDAVFCCAARAEEL',
+                'Unavailable',
+                'T',
+                'Unidentified',
+                0.00,
+                'Unavailable',
+                0.65,
+                'Unpublished',
+                111,
+                30,
+                4,
+                'CC-CC',
+                'V'
+            ),
+            (
+                '215429_CM1_17',
+                'Conus magus',
+                '215429_CM1',
+                'MLRLIIAAAVLLSACLAMLRLIIAAAVLLSACLAYPQRREGAPADAANLQSFDPALMPMQGMQGGQMTGMAGGQFLPFNPNLQMGYKRDFDENLEKRKQHSQFNADENKAPFDSEENFMNFLHNEKGDKHPFANVDSAATDLGQFDPSAENEDGKFRFFDKEQYPQRREGAPADAANLQSFDPALMPMQGMQGGQMTGMAGGQFLPFNPNLQMGYKRDFDENLEKRKQHSQFNADENKAPFDSEENFMNFLHNEKGDKHPFANVDSAATDLGQFDPSAENEDGKFRFFDKEQ',
+                'Partial',
+                'MLRLIIAAAVLLSACLA',
+                'MLRLIIAAAVLLSACLAYPQRREGAPADAANLQSFDPALMPMQGMQGGQMTGMAGGQFLPFNPNLQMGYKRDFDENLEKRKQHSQFNADENKAPFDSEENFMNFLHNEKGDKHPFANVDSAATDLGQFDPSAENEDGKFRFFDKEQ',
+                'YPQRREGAPADAANLQSFDPALMPMQGMQGGQMTGMAGGQFLPFNPNLQMGYKRDFDENLEKRKQHSQFNADENKAPFDSEENFMNFLHNEKGDKHPFANVDSAATDLGQFDPSAENEDGKFRFFDKEQ',
+                'Unavailable',
+                'B2',
+                'Unidentified',
+                0.00,
+                'Unavailable',
+                354.82,
+                'Unpublished',
+                292,
+                129,
+                0,
+                'Cysteine-Free',
+                'Unidentifiable'
+            ),
+            (
+                '215429_CM1_18',
+                'Conus magus',
+                '215429_CM1',
+                'LLWSDMVKYMTPKWGVFTVLPVWLIYSPCQTLLWSDMVKYMTPKWGVFTVLPVWLIYSPCQTLMPALPSPLAPRFWGYLPHASLNELMPALPSPLAPRFWGYLPHASLNE',
+                'Partial',
+                'LLWSDMVKYMTPKWGVFTVLPVWLIYSPCQT',
+                'LLWSDMVKYMTPKWGVFTVLPVWLIYSPCQTLMPALPSPLAPRFWGYLPHASLNE',
+                'LMPALPSPLAPRFWGYLPHASLNE',
+                'Unavailable',
+                'Z',
+                'Unidentified',
+                0.00,
+                'Unavailable',
+                1.53,
+                'Unpublished',
+                110,
+                24,
+                0,
+                'Cysteine-Free',
+                'Unidentifiable'
+            ),
+            (
+                '215429_CM1_19',
+                'Conus magus',
+                '215429_CM1',
+                'MGMRTMFTVFLLVVLATTVVSMGMRTMFTVFLLVVLATTVVSDRASNRENRRASNWNTRIAYIGCCDIPDCYNKNREQCLDESSASNWNTRIAYIGCCDIPDCYNKNREQCLDESS',
+                'Partial',
+                'MGMRTMFTVFLLVVLATTVVS',
+                'MGMRTMFTVFLLVVLATTVVSDRASNRENRRASNWNTRIAYIGCCDIPDCYNKNREQCLDESS',
+                'ASNWNTRIAYIGCCDIPDCYNKNREQCLDESS',
+                'Unavailable',
+                'A',
+                'Im1.95',
+                100,
+                'Unavailable',
+                0,
+                'Unpublished',
+                116,
+                32,
+                4,
+                'CC-C-C',
+                'I'
+            ),
+            (
+                '215429_CM1_20',
+                'Conus magus',
+                '215429_CM1',
+                'MSGLGIMLLALLLLVSLETSLPGGGEGMSGLGIMLLALLLLVSLETSLPGGGEGQAMSREKNPQGSRKILLRRALQKLRKPPRGTKKSASHDFPLTAFVAQAMSREKNPQGSRKILLRRALQKLRKPPRGTKKSASHDFPLTAFVA',
+                'Partial',
+                'MSGLGIMLLALLLLVSLETSLPGGGEG',
+                'MSGLGIMLLALLLLVSLETSLPGGGEGQAMSREKNPQGSRKILLRRALQKLRKPPRGTKKSASHDFPLTAFVA',
+                'QAMSREKNPQGSRKILLRRALQKLRKPPRGTKKSASHDFPLTAFVA',
+                'Unavailable',
+                'O3',
+                'Unidentified',
+                0.00,
+                'Unavailable',
+                2.08,
+                'Unpublished',
+                146,
+                46,
+                0,
+                'Cysteine-Free',
+                'Unidentifiable'
+            ),
+            (
+                '215429_CM1_21',
+                'Conus magus',
+                '215429_CM1',
+                'MSTPRMMPLVLLLLLSLATHCGDGMSTPRMMPLVLLLLLSLATHCGDGQAIQGDRRLSARLLRGYKERGLSIKTCGTCNGARCCGLCPCSPGEKNCSCLPFTCGTCNGARCCGLCPCSPGEKNCSCLPF',
+                'Partial',
+                'MSTPRMMPLVLLLLLSLATHCGDG',
+                'MSTPRMMPLVLLLLLSLATHCGDGQAIQGDRRLSARLLRGYKERGLSIKTCGTCNGARCCGLCPCSPGEKNCSCLPF',
+                'TCGTCNGARCCGLCPCSPGEKNCSCLPF',
+                'Unavailable',
+                'V',
+                'Unidentified',
+                0.00,
+                'Unavailable',
+                0,
+                'Unpublished',
+                129,
+                28,
+                8,
+                'C-C-CC-C-C-C-C',
+                'XV'
+            ),
+            (
+                '215429_CM1_22',
+                'Conus magus',
+                '215429_CM1',
+                'MKLTCVLIVAVLFLTACHLMKLTCVLIVAVLFLTACHLITTDDSTGKQRYQAWKLRSKMQNSVLSRLSKRCDEEGTGCSSDSECCSGRCTPEGLFEFCECDEEGTGCSSDSECCSGRCTPEGLFEFCE',
+                'Partial',
+                'MKLTCVLIVAVLFLTACHL',
+                'MKLTCVLIVAVLFLTACHLITTDDSTGKQRYQAWKLRSKMQNSVLSRLSKRCDEEGTGCSSDSECCSGRCTPEGLFEFCE',
+                'CDEEGTGCSSDSECCSGRCTPEGLFEFCE',
+                'Unavailable',
+                'O1',
+                'Conotoxin-1',
+                100,
+                'Unavailable',
+                7.52,
+                'Unpublished',
+                128,
+                29,
+                6,
+                'C-C-CC-C-C',
+                'VI/VII'
+            ),
+            (
+                '215429_CM1_23',
+                'Conus magus',
+                '215429_CM1',
+                'MKLTYALIVAMLFLTACQLMKLTYALIVAMLFLTACQLITTHDSRGRQEYRAANARTKMQNYKIFRLTKGCVAPGGRCTLRHINCCSKVCKLKKNGNPVCVLTKGCVAPGGRCTLRHINCCSKVCKLKKNGNPVCV',
+                'Partial',
+                'MKLTYALIVAMLFLTACQL',
+                'MKLTYALIVAMLFLTACQLITTHDSRGRQEYRAANARTKMQNYKIFRLTKGCVAPGGRCTLRHINCCSKVCKLKKNGNPVCV',
+                'LTKGCVAPGGRCTLRHINCCSKVCKLKKNGNPVCV',
+                'Unavailable',
+                'O1',
+                'Unidentified',
+                0.00,
+                'Unavailable',
+                0.73,
+                'Unpublished',
+                136,
+                35,
+                6,
+                'C-C-CC-C-C',
+                'VI/VII'
+            ),
+            (
+                '215429_CM1_24',
+                'Conus magus',
+                '215429_CM1',
+                'MVISISISSPCLGLLLASVRVTGMVISISISSPCLGLLLASVRVTGVGVTGVGNFKGAVLGQTQWRPPEGGLAVAGSVTKQLRSSVGDSAAGFLHVLDVGVTGVGNFKGAVLGQTQWRPPEGGLAVAGSVTKQLRSSVGDSAAGFLHVLD',
+                'Partial',
+                'MVISISISSPCLGLLLASVRVTG',
+                'MVISISISSPCLGLLLASVRVTGVGVTGVGNFKGAVLGQTQWRPPEGGLAVAGSVTKQLRSSVGDSAAGFLHVLD',
+                'VGVTGVGNFKGAVLGQTQWRPPEGGLAVAGSVTKQLRSSVGDSAAGFLHVLD',
+                'Unavailable',
+                'W',
+                'Unidentified',
+                0.00,
+                'Unavailable',
+                0.79,
+                'Unpublished',
+                150,
+                52,
+                0,
+                'Cysteine-Free',
+                'Unidentifiable'
+            )
+            ON CONFLICT (id) DO NOTHING;
         `;
+
         // seed BARCODE table
+        await sql`
+            INSERT INTO barcode
+            (
+                species_name,
+                specimen_id,
+                gene_marker,
+                length_sequence,
+                sequence,
+                source_method,
+                collection_province,
+                collection_site,
+                platform_sequence,
+                db_sequence,
+                accession_external,
+                validation_status,
+                publication_doi
+            )
+            
+            VALUES
+            ('Conus eburneus','856252_CE1','Unavailable',0,'Unavailable','Unavailable','Cebu','Caw-oy','Novaseq6000','Unavailable','Unavailable','Unavailable','https://doi.org/10.3389/fmars.2025.1616692'),
+            ('Conus imperialis','853932_CI1','COI',598,'TATTAAAATTCCGATCAGTTAGAAGCATAGTAATAGCTCCAGCCAAGACAGGCAAAGACAGAAGAAGTAAAATAGCTGTGATTTTTACTGACCACACAAAAAGAGAAAGCCGTTCAAATTTTATTCCCTGTCACCGCATATTAATGATTGTAGTAATAAAATTTACCGCTCCTAAAATAGAAGAAACACCTGCAAGGTGTAGAGAAAAAATTGCTAAATCTACAGAACCGCCGGCATGCGCCAAGTTTCCCGCTAAAGGTGGATACACAGTTCATCCTGTTCCTACCCCCCTCTCTACGGCAGCTGAAGATAGAAGAAGCAATAATGCAGGAGGAAGTAACCAGAAACTTATATTATTCAATCGTGGAAATACCATATCCGGGGCCCCTAACATTAAAGGCACCAATCAGTTTCCAAACCCTCCAATCATTATCGGTATAACTAAAAAAAAAATTATTACAAACGCATGTGCTGTTACAATCACGTTGTATAGCTGGTCATCCCCAAGTAAGGCACCAGGTTGCCCTAATTCCGCACGGATTAGAAGCCTTAAAGCGGTCCCAACCAGCCCTGATCATATACCAAATAAAATATACAA','Transcriptome-derived','Cebu','Caw-oy','NextSeq500','In-house database','Unavailable','Putative','Under Review'),
+            ('Conus tessulatus','856256_CT1','Unavailable',0,'Unavailable','Unavailable','Cebu','Caw-oy','HiSeq 2000','Unavailable','Unavailable','Unavailable','https://doi.org/10.3389/fmars.2025.1616692'),
+            ('Conus mustelinus','852344_CM1','Unavailable',0,'Unavailable','Unavailable','Cebu','Caw-oy','HiSeq 2000','Unavailable','Unavailable','Unavailable','https://doi.org/10.3390/md23070266'),
+            ('Conus miles', '852343 _CM1','Unavailable',0,'Unavailable','Transcriptome-derived','Marinduque','Buenavista','HiSeq 2000','Unavailable','Unavailable','Putative','https://doi.org/10.3390/md23070266'),
+            ('Conus capitaneus','852340_CC1','Unavailable',0,'Unavailable','Transcriptome-derived','Cebu','Caw-oy','HiSeq 2000','Unavailable','Unavailable','Putative','https://doi.org/10.3390/md23070266')
+            ON CONFLICT (specimen_id) DO NOTHING;
+        `;
+
         // seed PUBLICATION table
+        await sql`
+            INSERT INTO publication
+            (
+                id,
+                title,
+                author, 
+                year_published, 
+                journal,
+                doi,
+                species_reported 
+            )
+            VALUES 
+            (
+                1,
+                'Analysis of venom gland transcriptomes from two Tesseliconus species, Conus eburneus and Conus tessulatus, reveals inter- and intra-specific variations in conopeptide diversity and expression as well as putative novel gene superfamilies and disulfide-poor venom components',
+                'Francis A. Tablizo, Dan Jethro M. Masacupan, Arturo O. Lluisma',
+                2025,
+                'Frontiers in Marine Science',
+                'https://doi.org/10.3389/fmars.2025.1616692',
+                '856252_CE1, 856256_CT1'
+            ),
+            (   
+                2,
+                'Identification of Conomarphin Variants in the Conus eburneus Venom and the Effect of Sequence and PTM Variations on Conomarphin Conformations',
+                'Corazon Ericka Mae M. Itang, Jokent T. Gaza, Dan Jethro M. Masacupan, Dessa Camille R. Batoctoy, Yu-Ju Chen, Ricky B. Nellas, Eizadora T. Yu',
+                2020,
+                'Marine Drugs',
+                'https://doi.org/10.3390/md18100503',
+                '856252_CE2'
+            ),
+            (   
+                3,
+                'Conomarphins cause paralysis in mollusk: Critical and tunable structural elements for bioactivity',
+                'Charmaine B. Mendoza, Dan Jethro M. Masacupan, Dessa Camille R. Batoctoy, Eizadora T. Yu, Arturo O. Lluisma, Lilibeth A. Salvador-Reyes',
+                2019,
+                'Journal of Peptide Science',
+                'https://doi.org/10.1002/psc.3179',
+                '856252_CE2'
+            ),
+            (   
+                4,
+                'Diversity and Novelty of Venom Peptides in Vermivorous Cone Snails, Subgenus Rhizoconus (Gastropoda: Mollusca)',
+                'Christine Marie C. Florece, Quentin Kaas, Neda Barghi, Arturo O. Lluisma',
+                2025,
+                'Marine Drugs',
+                'https://doi.org/10.3390/md23070266',
+                '852344_CM1, 852343_CM1, 852340_CC1'
+            ),
+            (   
+                5,
+                'Diversity and novelty of venom peptides from Conus (Asprella) rolani revealed by analysis of its venom duct transcriptome',
+                'Ryoichi S. Taguchi, Dan Jethro M. Masacupan, Arturo O. Lluisma',
+                2024,
+                'SciEnggJ',
+                'https://doi.org/10.54645/202417SupQCH-42',
+                '843072_CR1'
+            ),
+            (   
+                6,
+                'Prey Shifts Drive Venom Evolution in Cone Snails',
+                'Thomas Lund Koch, Samuel D Robinson, Paula Flórez Salcedo, Kevin Chase, Jason Biggs, Alexander E Fedosov, Mark Yandell, Baldomero M Olivera, Helena Safavi-Hemami',
+                2024,
+                'Molecular Biology and Evolution',
+                'https://doi.org/10.1093/molbev/msae120',
+                '853645_CT1'
+            ),
+            (   
+                7,
+                'Comparison of the Venom Peptides and Their Expression in Closely Related Conus Species: Insights into Adaptive Post-speciation Evolution of Conus Exogenomes',
+                'Neda Barghi, Gisela P. Concepcion, Baldomero M. Olivera, Arturo O. Lluisma',
+                2015,
+                'Genome Biology and Evolution',
+                'https://doi.org/10.1093/gbe/evv109',
+                '853642_CL1, 853645_CT2'
+            ),
+            (   
+                8,
+                'The Venom Repertoire of Conus gloriamaris (Chemnitz, 1777), the Glory of the Sea',
+                'Samuel D. Robinson, Qing Li, Aiping Lu, Pradip K. Bandyopadhyay, Mark Yandell, Baldomero M. Olivera, Helena Safavi-Hemami',
+                2017,
+                'Marine Drugs',
+                'https://doi.org/10.3390/md15050145',
+                '843253_CG1'
+            )
+            ON CONFLICT (id) DO NOTHING;
+        `;
         // seed TAXONOMIC table
+        await sql `
+            INSERT INTO taxonomic 
+            (
+                id,
+                domain, 
+                kingdom, 
+                phylum,
+                class,
+                taxonomy_order, 
+                family,
+                genus,
+                subgenus, 
+                species 
+            )
+            VALUES
+            ('856252_CE1','Eukaryota','Metazoa','Mollusca','Gastropoda','Neogastropoda','Conida','Conus','Tesseliconus','Conus eburneus'),
+            ('856252_CE2','Eukaryota','Metazoa','Mollusca','Gastropoda','Neogastropoda','Conida','Conus','Tesseliconus','Conus eburneus'),
+            ('853932_CI1','Eukaryota','Metazoa','Mollusca','Gastropoda','Neogastropoda','Conida','Conus','Stephanoconus','Conus imperialis'),
+            ('856256_CT1','Eukaryota','Metazoa','Mollusca','Gastropoda','Neogastropoda','Conida','Conus','Tesseliconus','Conus tessulatus'),
+            ('852344_CM1','Eukaryota','Metazoa','Mollusca','Gastropoda','Neogastropoda','Conida','Conus','Rhizoconus','Conus mustelinus'),
+            ('852343_CM1','Eukaryota','Metazoa','Mollusca','Gastropoda','Neogastropoda','Conida','Conus','Rhizoconus','Conus miles'),
+            ('852340_CC1','Eukaryota','Metazoa','Mollusca','Gastropoda','Neogastropoda','Conida','Conus','Rhizoconus','Conus capitaneus'),
+            ('215429_CM1','Eukaryota','Metazoa','Mollusca','Gastropoda','Neogastropoda','Conida','Conus','Pionoconus','Conus magus'),
+            ('428368_CS1','Eukaryota','Metazoa','Mollusca','Gastropoda','Neogastropoda','Conida','Conus','Pionoconus','Conus striolatus'),
+            ('428363_CS1','Eukaryota','Metazoa','Mollusca','Gastropoda','Neogastropoda','Conida','Conus','Pionoconus','Conus stercusmuscarum'),
+            ('843072_CR1','Eukaryota','Metazoa','Mollusca','Gastropoda','Neogastropoda','Conida','Conus','Asprella','Conus rolani'),
+            ('853645_CT1','Eukaryota','Metazoa','Mollusca','Gastropoda','Neogastropoda','Conida','Conus','Splinoconus','Conus tribblei'),
+            ('853642_CL1','Eukaryota','Metazoa','Mollusca','Gastropoda','Neogastropoda','Conida','Conus','Splinoconus','Conus lenavati'),
+            ('853645_CT2','Eukaryota','Metazoa','Mollusca','Gastropoda','Neogastropoda','Conida','Conus','Splinoconus','Conus tribblei'),
+            ('845894_CG1','Eukaryota','Metazoa','Mollusca','Gastropoda','Neogastropoda','Conida','Conus','Gastridium','Conus geographus'),
+            ('843253_CG1','Eukaryota','Metazoa','Mollusca','Gastropoda','Neogastropoda','Conida','Conus','Cylinder','Conus gloriamaris'),
+            ('836797_CB1','Eukaryota','Metazoa','Mollusca','Gastropoda','Neogastropoda','Conida','Conus','Conus','Conus bandanus'),
+            ('428363_CS2','Eukaryota','Metazoa','Mollusca','Gastropoda','Neogastropoda','Conida','Conus','Pionoconus','Conus stercusmuscarum'),
+            ('848247_CF1','Eukaryota','Metazoa','Mollusca','Gastropoda','Neogastropoda','Conida','Conus','Phasmoconus','Conus flavus')
+            ON CONFLICT (id) DO NOTHING;
+        `;
 
 
 
