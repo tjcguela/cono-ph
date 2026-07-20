@@ -15,7 +15,6 @@ function normalizeRecord(record) {
       { label: 'Species Name', value: String(record['Species Name'] ?? 'Unavailable') },
       { label: 'Specimen ID', value: String(record['Specimen ID'] ?? 'Unavailable') },
       { label: 'Gene Marker', value: String(record['Gene Marker'] ?? 'Unavailable') },
-      { label: 'Sequence Length (bp)', value: String(record['Sequence Length (bp)'] ?? 'Unavailable') },
       { label: 'Collection Province', value: String(record['Province'] ?? 'Unavailable') },
       { label: 'Validation Status', value: normalizeSequenceStatus(record['Validation Status of CO1 Sequences']) },
     ],

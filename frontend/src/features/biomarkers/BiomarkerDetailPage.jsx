@@ -123,6 +123,10 @@ export default function BiomarkerDetailPage() {
     )
   }, [id, recordsSource])
 
+  const getTopSummaryValue = (label) => {
+    return record.topSummaryItems.find((item) => item.label === label)?.value ?? 'Unavailable'
+  }
+
   useEffect(() => {
     let active = true
 
@@ -164,9 +168,9 @@ export default function BiomarkerDetailPage() {
   }
 
   const generalInformationItems = [
-    { label: 'Scientific Name', value: record.topSummaryItems[0]?.value ?? 'Unavailable' },
-    { label: 'specimen_id', value: record.topSummaryItems[1]?.value ?? 'Unavailable' },
-    { label: 'Province', value: record.topSummaryItems[4]?.value ?? 'Unavailable' },
+    { label: 'Scientific Name', value: getTopSummaryValue('Species Name') },
+    { label: 'specimen_id', value: getTopSummaryValue('Specimen ID') },
+    { label: 'Province', value: getTopSummaryValue('Collection Province') },
     {
       label: 'Municipality',
       value:
@@ -176,18 +180,18 @@ export default function BiomarkerDetailPage() {
   ]
 
   const annotationInformationItems = [
-    { label: 'gene_marker', value: record.topSummaryItems[2]?.value ?? 'Unavailable' },
+    { label: 'gene_marker', value: getTopSummaryValue('Gene Marker') },
     {
       label: 'gene_name',
       value:
-        record.topSummaryItems[2]?.value === 'COI'
+        getTopSummaryValue('Gene Marker') === 'COI'
           ? 'Cytochrome c oxidase subunit I'
           : 'Unavailable',
     },
     {
       label: 'genome_origin',
       value:
-        record.topSummaryItems[2]?.value === 'COI'
+        getTopSummaryValue('Gene Marker') === 'COI'
           ? 'Mitochondrial'
           : 'Unavailable',
     },
@@ -199,7 +203,7 @@ export default function BiomarkerDetailPage() {
     },
     {
       label: 'sequence_length_bp',
-      value: record.topSummaryItems[3]?.value ?? record.sequenceTab.length ?? 'Unavailable',
+      value: record.sequenceTab.length ?? 'Unavailable',
     },
     {
       label: 'source_method',
@@ -208,7 +212,7 @@ export default function BiomarkerDetailPage() {
         record.metadataTab.rows.find((item) => item.label === 'Source Method')?.value ??
         'Unavailable',
     },
-    { label: 'validation_status', value: record.topSummaryItems[5]?.value ?? record.status },
+    { label: 'validation_status', value: getTopSummaryValue('Validation Status') },
   ]
 
   const referenceItems = [
@@ -269,12 +273,6 @@ export default function BiomarkerDetailPage() {
           Export
           <Download className="h-4 w-4" />
         </Button>
-      </section>
-
-      <section className="join join-vertical w-full overflow-hidden rounded-[1.5rem] border border-brand-100 bg-brand-100/60 sm:grid sm:grid-cols-2 sm:gap-px sm:rounded-[1.5rem] xl:grid-cols-6">
-        {record.topSummaryItems.map((item) => (
-          <SummaryItem key={item.label} label={item.label} value={item.value} />
-        ))}
       </section>
 
       <div className="space-y-6">
