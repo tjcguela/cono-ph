@@ -62,7 +62,6 @@ export default function BiomarkerSidebar({
       province: 'All Provinces',
       status: [],
       hasAccession: false,
-      hasSequenceData: false,
     }
 
     setLocalFilters(resetFilters)
@@ -136,7 +135,7 @@ export default function BiomarkerSidebar({
 
           {statusOptions.length > 0 ? (
           <div className="space-y-2">
-            <label className="text-sm font-semibold text-black">Validation Status of CO1 Sequences</label>
+            <label className="text-sm font-semibold text-black">Validation Status of COI Sequences</label>
             <div className="space-y-2">
               {statusOptions.map((status) => {
                 const checked = (localFilters.status || []).includes(status)
@@ -161,16 +160,11 @@ export default function BiomarkerSidebar({
           ) : null}
 
           <div className="space-y-3 pt-1">
-            <TogglePill
-              label="Has External Accession"
-              enabled={Boolean(localFilters.hasAccession)}
-              onClick={() => updateLocalFilters({ hasAccession: !localFilters.hasAccession })}
-            />
-            <TogglePill
-              label="Has Sequence Length (bp)"
-              enabled={Boolean(localFilters.hasSequenceData)}
-              onClick={() => updateLocalFilters({ hasSequenceData: !localFilters.hasSequenceData })}
-            />
+          <TogglePill
+            label="Has External Accession"
+            enabled={Boolean(localFilters.hasAccession)}
+            onClick={() => updateLocalFilters({ hasAccession: !localFilters.hasAccession })}
+          />
           </div>
         </div>
       </div>

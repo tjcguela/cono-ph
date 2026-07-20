@@ -21,7 +21,6 @@ const biomarkerExplorerInitialFilters = {
   province: 'All Provinces',
   status: [],
   hasAccession: false,
-  hasSequenceData: false,
 }
 
 const biomarkerPageSize = 10
@@ -47,7 +46,6 @@ function rowMatchesFilters(row, filters) {
   if (!isDefaultOption(filters.province) && row.province !== filters.province) return false
   if ((filters.status || []).length > 0 && !filters.status.includes(row.status)) return false
   if (filters.hasAccession && row.accession === 'Unavailable') return false
-  if (filters.hasSequenceData && row.sequenceLength === 'Unavailable') return false
 
   return true
 }

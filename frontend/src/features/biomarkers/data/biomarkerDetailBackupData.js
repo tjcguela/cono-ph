@@ -1,18 +1,23 @@
 const BIOMARKER_DETAIL_BACKUP_PATH = '/backup-data/json/barcodes/latest.json'
 
+function normalizeSequenceStatus(value) {
+  const status = String(value ?? 'Unavailable')
+  return status === 'Putative' ? 'Partial' : status
+}
+
 function normalizeRecord(record) {
   return {
     biomarkerId: String(record['Specimen ID'] ?? ''),
     title: String(record['Specimen ID'] ?? ''),
     subtitle: 'Biomarker Record',
-    status: String(record['Validation Status of CO1 Sequences'] ?? 'Unavailable'),
+    status: normalizeSequenceStatus(record['Validation Status of CO1 Sequences']),
     topSummaryItems: [
       { label: 'Species Name', value: String(record['Species Name'] ?? 'Unavailable') },
       { label: 'Specimen ID', value: String(record['Specimen ID'] ?? 'Unavailable') },
       { label: 'Gene Marker', value: String(record['Gene Marker'] ?? 'Unavailable') },
       { label: 'Sequence Length (bp)', value: String(record['Sequence Length (bp)'] ?? 'Unavailable') },
       { label: 'Collection Province', value: String(record['Province'] ?? 'Unavailable') },
-      { label: 'Validation Status', value: String(record['Validation Status of CO1 Sequences'] ?? 'Unavailable') },
+      { label: 'Validation Status', value: normalizeSequenceStatus(record['Validation Status of CO1 Sequences']) },
     ],
     overview: {
       fields: [
@@ -22,7 +27,7 @@ function normalizeRecord(record) {
         { label: 'External Accession', value: String(record['External Accession'] ?? 'Unavailable') },
         { label: 'Sequence Length (bp)', value: String(record['Sequence Length (bp)'] ?? 'Unavailable') },
         { label: 'Collection Province', value: String(record['Province'] ?? 'Unavailable') },
-        { label: 'Validation Status', value: String(record['Validation Status of CO1 Sequences'] ?? 'Unavailable') },
+        { label: 'Validation Status', value: normalizeSequenceStatus(record['Validation Status of CO1 Sequences']) },
         { label: 'Publication DOI', value: String(record['Publication DOI'] ?? 'Unavailable') },
       ],
     },
@@ -34,13 +39,13 @@ function normalizeRecord(record) {
       summaryItems: [
         { label: 'Sequence Length (bp)', value: String(record['Sequence Length (bp)'] ?? 'Unavailable') },
         { label: 'Source Method', value: String(record['Source Method'] ?? 'Unavailable') },
-        { label: 'Sequence Completeness', value: String(record['Validation Status of CO1 Sequences'] ?? 'Unavailable') },
+        { label: 'Sequence Completeness', value: normalizeSequenceStatus(record['Validation Status of CO1 Sequences']) },
       ],
     },
     annotationsTab: {
       summary: 'Rendered from backup data.',
       items: [
-        { label: 'Validation Status', value: String(record['Validation Status of CO1 Sequences'] ?? 'Unavailable') },
+        { label: 'Validation Status', value: normalizeSequenceStatus(record['Validation Status of CO1 Sequences']) },
         { label: 'Gene Marker', value: String(record['Gene Marker'] ?? 'Unavailable') },
         { label: 'External Accession', value: String(record['External Accession'] ?? 'Unavailable') },
         { label: 'Coverage Note', value: String(record['Source Method'] ?? 'Unavailable') },
@@ -58,7 +63,7 @@ function normalizeRecord(record) {
         { label: 'Collection Site (Municipality)', value: String(record['Municipality'] ?? 'Unavailable') },
         { label: 'Source Method', value: String(record['Source Method'] ?? 'Unavailable') },
         { label: 'Sequence Database', value: String(record['Sequence Database'] ?? 'Unavailable') },
-        { label: 'Validation Status', value: String(record['Validation Status of CO1 Sequences'] ?? 'Unavailable') },
+        { label: 'Validation Status', value: normalizeSequenceStatus(record['Validation Status of CO1 Sequences']) },
       ],
     },
   }

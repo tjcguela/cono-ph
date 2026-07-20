@@ -1,5 +1,10 @@
 const BIOMARKER_BACKUP_PATH = '/backup-data/json/barcodes/latest.json'
 
+function normalizeSequenceStatus(value) {
+  const status = String(value ?? 'Unavailable')
+  return status === 'Putative' ? 'Partial' : status
+}
+
 function normalizeRecord(record) {
   return {
     biomarkerId: String(record['Specimen ID'] ?? record.biomarkerId ?? record.biomarker_id ?? ''),
@@ -8,7 +13,7 @@ function normalizeRecord(record) {
     accession: String(record['External Accession'] ?? record.accession ?? record.externalAccession ?? 'Unavailable'),
     sequenceLength: String(record['Sequence Length (bp)'] ?? record.sequenceLength ?? record.sequence_length ?? 'Unavailable'),
     province: String(record.Province ?? record.province ?? ''),
-    status: String(record['Validation Status of CO1 Sequences'] ?? record.status ?? 'Unavailable'),
+    status: normalizeSequenceStatus(record['Validation Status of CO1 Sequences'] ?? record.status),
   }
 }
 
