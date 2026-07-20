@@ -24,19 +24,75 @@ export const getAllSpecies = async (req, res) => {
 };
 
 export const createSpecies = async (req, res) => {
-    const { scientific_name, common_name, num_related_publications } = req.body;
+    const {
+        id,
+        scientific_name,
+        common_name,
+        subgenus,
+        diet_type,
+        region,
+        province,
+        municipality,
+        shell_image,
+        tissue_source,
+        num_coi,
+        num_conopeptides,
+        doi,
+        species_depository
+    } = req.body;
 
-    if (!scientific_name || !common_name || !num_related_publications) {
-        return res.status(400).json({
-            success: false,
-            message: "All fields are required",
-        });
-    }
+    if (
+            !id || 
+            !scientific_name || 
+            !common_name ||
+            !subgenus ||
+            !diet_type ||
+            (!num_coi && num_coi !== 0) || // to enable input of zeros
+            (!num_conopeptides && num_conopeptides !== 0) // to enable input of zeros
+        ) 
+        {
+            return res.status(400).json({
+                success: false,
+                message: "All fields are required",
+            });
+        }
 
     try {
         const newSpecies = await sql`
-            INSERT INTO species (scientific_name, common_name, num_related_publications)
-            VALUES (${scientific_name},${common_name},${num_related_publications})
+            INSERT INTO species 
+            (
+                id, 
+                scientific_name, 
+                common_name, 
+                subgenus,
+                diet_type,
+                region,
+                province,
+                municipality,
+                shell_image,
+                tissue_source,
+                num_coi,
+                num_conopeptides,
+                doi,
+                species_depository
+            )
+            VALUES 
+                (
+                    ${id}, 
+                    ${scientific_name}, 
+                    ${common_name}, 
+                    ${subgenus},
+                    ${diet_type},
+                    ${region},
+                    ${province},
+                    ${municipality},
+                    ${shell_image},
+                    ${tissue_source},
+                    ${num_coi},
+                    ${num_conopeptides},
+                    ${doi},
+                    ${species_depository}
+                )
             RETURNING *
         `;
 
@@ -64,13 +120,13 @@ export const getSpecies = async (req, res) => {
 
     try {
         const fetchedSpecies = await sql`
-            SELECT * FROM species where species_id=${id}
+            SELECT * FROM species where id=${id}
         `;
 
         res.status(200).json({
             success: true,
             data: fetchedSpecies[0],
-            message: "Succesfully retrieved species",
+            message: `Succesfully retrieved species: ${fetchedSpecies[0].scientific_name}`,
         });
     } catch (error) {
         console.log("getSpecies Error", error);
