@@ -32,12 +32,15 @@ function SummaryItem({ label, value }) {
   )
 }
 
-function CopyIconButton({ copied, onCopy, label }) {
+function CopyIconButton({ copied, onCopy, label, className }) {
   return (
     <button
       type="button"
       onClick={onCopy}
-      className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-[var(--app-border)] bg-white text-[var(--app-muted)] transition hover:border-brand-300 hover:text-brand-700"
+      className={cn(
+        'inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-[var(--app-border)] bg-white text-[var(--app-muted)] transition hover:border-brand-300 hover:text-brand-700',
+        className,
+      )}
       aria-label={`Copy ${label}`}
       title={`Copy ${label}`}
     >
@@ -79,9 +82,10 @@ function FieldList({ items, copiedField, onCopy }) {
           </dt>
           <dd className="min-w-0 text-[0.98rem] leading-7 text-[var(--app-text)]">
             {item.copyValue ? (
-              <div className="flex items-start justify-between gap-3">
-                <span className="min-w-0 break-all">{item.value}</span>
+              <div className="flex items-start gap-3">
+                <span className="min-w-0 flex-1 break-all">{item.value}</span>
                 <CopyIconButton
+                  className="ml-auto"
                   copied={copiedField === item.label}
                   onCopy={() => onCopy(item.label, item.copyValue)}
                   label={item.label}
@@ -99,15 +103,16 @@ function FieldList({ items, copiedField, onCopy }) {
 
 function ArchitectureGrid({ items, copiedField, onCopy }) {
   return (
-    <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+    <div className="space-y-4">
       {items.map((item) => (
         <div key={item.label} className="rounded-[1.25rem] border border-[var(--app-border)] bg-[#fcfcf8] p-4">
           <p className="text-[0.82rem] font-semibold uppercase tracking-[0.12em] text-[var(--app-muted)]">
             {item.label}
           </p>
-          <div className="mt-3 flex items-start justify-between gap-3">
-            <p className="min-w-0 break-all font-mono text-[0.98rem] text-[var(--app-text)]">{item.value}</p>
+          <div className="mt-3 flex items-start gap-3">
+            <p className="min-w-0 flex-1 break-all font-mono text-[0.98rem] text-[var(--app-text)]">{item.value}</p>
             <CopyIconButton
+              className="ml-auto"
               copied={copiedField === item.label}
               onCopy={() => onCopy(item.label, item.value)}
               label={item.label}

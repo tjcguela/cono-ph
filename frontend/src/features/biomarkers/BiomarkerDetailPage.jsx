@@ -20,7 +20,7 @@ function DetailPanel({ title, description, action, children, className }) {
             <p className="max-w-3xl text-sm leading-6 text-[var(--app-muted)]">{description}</p>
           ) : null}
         </div>
-        {action}
+        {action ? <div className="ml-auto flex justify-end">{action}</div> : null}
       </div>
       <div className="border-t border-[var(--app-border)] px-5 py-5">{children}</div>
     </Card>
